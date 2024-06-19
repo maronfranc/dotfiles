@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Right ctrl fix
+Comment=Fix 'right ctrl' from '/' to 'ctrl'
+Exec=bash -c 'xmodmap -e "keycode 105 = Control_R NoSymbol Control_R" && xmodmap -e "add control = Control_R"'
+Icon=MidnightCommander
+# `Terminal` visual interface for humans to see thier interactions with machine
+Terminal=false 
+Type=Application
+Hidden=false
