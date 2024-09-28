@@ -9,6 +9,8 @@ function random_string() {
 
 function convert_pdf_to_image() {
   local name=$1
+  # filename=${file%.*} # remove any extension.
+  # filename=$(basename "$name" .pdf) # remove pdf extension.
   pdftoppm "$PWD/$name.pdf" "$name" -png
 }
 
@@ -26,7 +28,6 @@ alias alacrittyeditconfig="nvim $DOTFILE_DIR/alacritty/alacritty.yml"
 # Open `man` with neovim
 # SEE: https://www.reddit.com/r/neovim/comments/g7ymvv/do_you_use_neovim_for_reading_your_man_pages/
 # export MANPAGER='nvim +Man!' export MANWIDTH=999
-alias fe="nnn" # file explorer
 alias qq="exit"
 
 alias kubectl="minikube kubectl -- "
