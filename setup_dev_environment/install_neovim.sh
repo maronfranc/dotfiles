@@ -16,7 +16,9 @@ cd "${PROGRAMS_DIR}/neovim" || exit
 make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 
-# Install "xclip" to enable copy and paste from neovim.
+# Keymap commands uses "xclip" to copy and paste from neovim.
 sudo apt install xclip
-# Install trash-cli to neo-tree plugin run send to trash command.
+# "Neo-tree" uses "trash-cli" send files to trash.
 sudo apt install trash-cli
+# "Telescope" uses "ripgrep" to find files.
+sudo apt install ripgrep

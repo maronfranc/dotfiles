@@ -1,5 +1,5 @@
 # Install Docker and docker-compose 
-sudo apt install docker docker.io docker-compose
+sudo apt install -y docker docker.io docker-compose
 
 # Add permission
 sudo groupadd docker
