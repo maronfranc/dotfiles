@@ -8,13 +8,12 @@ print_color() {
     local bg_code=$1
     local text_code=$2
     local color_text="${bg_code}${text_code}m [CODE:${text_code}] ${RESET}"
-    
+
     # echo -en "\033[48;5;${code}m \033[38;5;${code}m ${code} \033[0m"
     # echo -e "${BACKGROUND_COLOR}${bg_code}m ${TEXT_COLOR}${text_code}m ${bg_code} ${RESET}"
- 
+
     # echo -en "${BACKGROUND_COLOR}${bg_code};${TEXT_COLOR}${text_code}${color_text}" # Text color
     # echo -e "${BACKGROUND_COLOR}${bg_code}m${TEXT_COLOR}${text_code}${color_text}" # BG color
-
 
     local text_color_command="${BACKGROUND_COLOR}${bg_code};${TEXT_COLOR}${text_code}${color_text}"
     local bg_color_command="${BACKGROUND_COLOR}${bg_code}m${TEXT_COLOR}${text_code}${color_text}"

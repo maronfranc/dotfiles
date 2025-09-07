@@ -20,4 +20,3 @@ function tmuxhelptabs() {
   echo "  - ,  name window"
   echo "  - &  kill window"
 }
-

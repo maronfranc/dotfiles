@@ -3,6 +3,10 @@
 if [[ -z "$DOTFILE_DIR" ]] ; then echo "DOTFILE_DIR var is empty" ; fi
 if [[ -z "$SOURCE_DIR" ]] ; then echo "SOURCE_DIR var is empty" ; fi
 
+function listen_keys() {
+  stdbuf -o0 showkey -a | cat -
+}
+
 function random_string() {
   tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo
 }
@@ -12,6 +16,17 @@ function convert_pdf_to_image() {
   # filename=${file%.*} # remove any extension.
   # filename=$(basename "$name" .pdf) # remove pdf extension.
   pdftoppm "$PWD/$name.pdf" "$name" -png
+}
+
+function route_clean() {
+    if [ -z "$1" ]; then
+        echo "Please provide a string"
+        return 1
+    fi
+    
+    # Replace all occurrences of "/" with "__"
+    modified_string="${1//\//__}"
+    echo "$modified_string"
 }
 
 alias gpunvidiawatch='bash $SOURCE_DIR/../scripts/watch-nvidia.sh'
@@ -31,3 +46,4 @@ alias alacrittyeditconfig="nvim $DOTFILE_DIR/alacritty/alacritty.yml"
 alias qq="exit"
 
 alias kubectl="minikube kubectl -- "
+alias cpu_temp="paste <(cat /sys/class/thermal/thermal_zone*/type) <(cat /sys/class/thermal/thermal_zone*/temp) | column -s $'\t' -t | sed 's/\(.\)..$/.\1°C/'"

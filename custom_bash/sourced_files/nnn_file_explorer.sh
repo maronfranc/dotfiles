@@ -6,3 +6,5 @@
 
 alias fe="nnn"
 alias n3="nnn"
+
+alias notesdir="cd ~/999_notes/ && nvim "
