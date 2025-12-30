@@ -1,0 +1,29 @@
+# SEE list:https://www.nerdfonts.com/font-downloads
+# SEE fonts:
+#   1. https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.0/Hack.zip
+#   2.  https://github.com/source-foundry/Hack/tree/v3.003
+# Download and move to `~/.local/share/fonts` or `~/.fonts/`.
+# Then run ./load.sh
+# To update cache run: `fc-cache -fv`
+# To find the correct font NAME run: `fc-list | grep -i hack` 
+[window]
+opacity = 0.9
+
+[font]
+size = 12.5
+
+[font.normal]
+family = "Hack Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "Hack Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "Hack Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "Hack Nerd Font"
+style = "Bold Italic"
