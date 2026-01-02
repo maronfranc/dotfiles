@@ -1,6 +1,3 @@
-
-
-
 # gpg_verify_asc() {
 #   local asc_file=$1
 #   local file=$2

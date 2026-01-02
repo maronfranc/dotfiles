@@ -5,3 +5,5 @@ function docker_ip() {
   # TODO: get container names and add options select.
   docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name
 }
+
+# alias kubectl="minikube kubectl -- "

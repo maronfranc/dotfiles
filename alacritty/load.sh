@@ -7,7 +7,20 @@ mkdir -p $alacritty_dir
 rm -rf $alacritty_file
 
 ln -s $(pwd)/alacritty.toml $alacritty_file
-fc-cache -fv
+
+read -rp "Do you want to reload cached fonts? [y/n]: " answer
+echo $answer
+# answer="${answer,,}" # to lower case
+
+case "$answer" in
+    [Yy]|[Yy][Ee][Ss])
+        fc-cache -fv
+    ;;
+    # [Nn]|[Nn][Oo])
+    *)
+        echo "Fonts cache reload skipped."
+    ;;
+esac
 
 echo "RUNNED: \n 1. ln -s $(pwd)/alacritty.toml $alacritty_file"
 echo "- 1. Link file: ln -s $(pwd)/alacritty.toml $alacritty_file"

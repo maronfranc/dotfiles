@@ -2,10 +2,9 @@
 
 # Global vars being used in other bash files 
 # DOTFILE_DIR="$HOME/_dotfiles"
-DOTFILE_DIR="$HOME/000_code/00000_movel/_dotfiles"
+DOTFILE_DIR="$HOME/000/000_github/dotfiles"
 BASH_DIR="$DOTFILE_DIR/custom_bash"
 SOURCE_DIR="$BASH_DIR/sourced_files"
-
 
 # Source all files in $SOURCE_DIR directory. 
 for file_path in "$SOURCE_DIR"/*; do

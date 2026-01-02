@@ -2,7 +2,7 @@
 
 # SEE: https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-windowizer
 function tmuxdev() {
-  target="main-session"
+  local target="main-session"
   if ! tmux has-session -t $target 2> /dev/null; then
     tmux new-session -s $target
     return
