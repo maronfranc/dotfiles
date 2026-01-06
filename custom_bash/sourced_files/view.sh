@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
 load_view() {
-  local RESET='\033[0m'
-  local BOLD='\033[1m'
-  local ITALIC='\033[3m'
-  local RED='\033[31m'
-  local GREEN='\033[32m'
-  local YELLOW='\033[33m'
-  local CYAN='\033[36m'
-  # local BRIGHT_CYAN='\033[1;96m'   
-  local BLUE='\033[34m'
-  local CPU_ICON="󰹑"
-  local TEMP_ICON="󰔄"
-  local RAM_ICON=""
+  local C_RESET='\033[0m'
+  local C_BOLD='\033[1m'
+  local C_ITALIC='\033[3m'
+  local C_RED='\033[31m'
+  local C_GREEN='\033[32m'
+  local C_YELLOW='\033[33m'
+  local C_CYAN='\033[36m'
+  # local C_BRIGHT_CYAN='\033[1;96m'   
+  local C_BLUE='\033[34m'
+  local ICON_CPU="󰹑"
+  local ICON_TEMP="󰔄"
+  local ICON_RAM=""
 
   #/**
   # * Run an `echo -e ${input}` wrapping in `│` with fixed padding.
@@ -29,47 +29,64 @@ load_view() {
     printf "│%b%*s│\n" "$input" "$pad" "" # Print with borders
   }
 
+  # Colorize temperature based on value
+  color_temp() {
+    local temp="$1"
+
+    if (( $(echo "$temp < 40" | bc -l) )); then
+      echo -e "${C_BLUE}${temp}°C${C_RESET}"
+    elif (( $(echo "$temp <= 70" | bc -l) )); then
+      echo -e "${C_YELLOW}${temp}°C${C_RESET}"
+    else
+      echo -e "${C_RED}${temp}°C${C_RESET}"
+    fi
+  }
+
+  local thermal_data=$(
+    paste <(cat /sys/class/thermal/thermal_zone*/type) \
+          <(cat /sys/class/thermal/thermal_zone*/temp) |
+    awk '{ printf "%s %.1f\n", $1, $2/1000 }'
+  )
+
+  # Print a temperature sensor if it exists
+  print_sensor() {
+    local sensor="$1"
+    local description="$2"
+    local temp
+    temp=$(echo "$thermal_data" | awk -v s="$sensor" '$1==s {print $2}')
+
+    if [[ -n "$temp" ]]; then
+      pprint "${ICON_TEMP} ${C_RED}${description}${C_RESET}(${sensor}): $(color_temp "$temp")"
+    fi
+  }
+
   print_logo() {
-    local CPU_CORES=$(nproc)
-    local CPU_USAGE_PCT=$(top -bn1 | grep "Cpu(s)" |
+    local cpu_cores=$(nproc)
+    local cpu_usage_pct=$(top -bn1 | grep "Cpu(s)" |
       sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1 "%"}')
-
-    local RAM_TOTAL=$(free -g | grep Mem | awk '{print $2}')
-    local RAM_USED=$(free -g | grep Mem | awk '{print $3}')
-    # local RAM_FREE=$(free -g | grep Mem | awk '{print $4}')
-    local RAM_USED_PERCENT=$(free | grep Mem | awk '{print int($3/$2 * 100)}')
-
-    if command -v sensors &>/dev/null; then
-      local CPU_TEMP=$(sensors | grep -i 'Core 0' |
-        awk '{print $3}' | sed 's/+//g' | sed 's/°C//g')
-    else
-      local CPU_TEMP="N/A"
-    fi
-    # Set color based on CPU Temperature using bc for floating-point comparison
-    if (($(echo "$CPU_TEMP < 40" | bc -l))); then
-      local CPU_COLOR=$BLUE
-    elif (($(echo "$CPU_TEMP >= 40 && $CPU_TEMP <= 70" | bc -l))); then
-      local CPU_COLOR=$YELLOW
-    else
-      local CPU_COLOR=$RED
-    fi
+    local ram_total=$(free -g | grep Mem | awk '{print $2}')
+    local ram_used=$(free -g | grep Mem | awk '{print $3}')
+    # local ram_free=$(free -g | grep Mem | awk '{print $4}')
+    local ram_used_percent=$(free | grep Mem | awk '{print int($3/$2 * 100)}')
 
     echo -e "┌─────────────────────────────────────────────┐"
-    echo -e "│${YELLOW} ()      () ()()()()   ()()()()() ()      () ${RESET}│"
-    echo -e "│${YELLOW} ()()  ()() ()      () ()         ()      () ${RESET}│"
-    echo -e "│${YELLOW} () ()() () ()      () ()         ()      () ${RESET}│"
-    echo -e "│${YELLOW} ()      () ()      () ()()()()    ()    ()  ${RESET}│"
-    echo -e "│${YELLOW} ()      () ()      () ()           ()  ()   ${RESET}│"
-    echo -e "│${YELLOW} ()      () ()      () ()            ()()    ${RESET}│"
-    echo -e "│${YELLOW} ()      () ()()()()   ()()()()()     ()     ${RESET}│"
+    echo -e "│${C_YELLOW} ()      () ()()()()   ()()()()() ()      () ${C_RESET}│"
+    echo -e "│${C_YELLOW} ()()  ()() ()      () ()         ()      () ${C_RESET}│"
+    echo -e "│${C_YELLOW} () ()() () ()      () ()         ()      () ${C_RESET}│"
+    echo -e "│${C_YELLOW} ()      () ()      () ()()()()    ()    ()  ${C_RESET}│"
+    echo -e "│${C_YELLOW} ()      () ()      () ()           ()  ()   ${C_RESET}│"
+    echo -e "│${C_YELLOW} ()      () ()      () ()            ()()    ${C_RESET}│"
+    echo -e "│${C_YELLOW} ()      () ()()()()   ()()()()()     ()     ${C_RESET}│"
     echo -e "├─────────────────────────────────────────────┤"
-    # pprint   "${CYAN}${BOLD}$CPU_ICON CPU Stats:${RESET}"
-    pprint "$TEMP_ICON ${CYAN}CPU Temperature: ${BOLD}${CPU_COLOR}${CPU_TEMP}°C${RESET}"
-    pprint "$CPU_ICON ${CYAN}CPU(${CPU_CORES} Cores) usage: ${BOLD}${GREEN}${CPU_USAGE_PCT}${RESET}"
-    pprint "$RAM_ICON ${YELLOW}Total Memory: ${BOLD}${GREEN}${RAM_TOTAL} GB${RESET}"
-    pprint "$RAM_ICON ${YELLOW}Used Memory:  ${BOLD}${GREEN}${RAM_USED} GB (${RAM_USED_PERCENT}%)${RESET}"
-    # pprint "${CYAN}${BOLD}${RAM_ICON} Memory Stats:${RESET}"
-    # pprint "$RAM_ICON  ${CYAN}Free Memory:  ${BOLD}${GREEN}${RAM_FREE} GB${RESET}"
+    # pprint   "${C_CYAN}${C_BOLD}$ICON_CPU CPU Stats:${C_RESET}"
+    print_sensor "x86_pkg_temp" "CPU"
+    print_sensor "acpitz" "Motherboard"
+    print_sensor "iwlwifi_1" "Wi-Fi card"
+    pprint "$ICON_CPU ${C_CYAN}CPU(${cpu_cores} Cores) usage: ${C_BOLD}${C_GREEN}${cpu_usage_pct}${C_RESET}"
+    pprint "$ICON_RAM ${C_YELLOW}Total Memory: ${C_BOLD}${C_GREEN}${ram_total} GB${C_RESET}"
+    pprint "$ICON_RAM ${C_YELLOW}Used Memory:  ${C_BOLD}${C_GREEN}${ram_used} GB (${ram_used_percent}%)${C_RESET}"
+    # pprint "${C_CYAN}${C_BOLD}${ICON_RAM} Memory Stats:${C_RESET}"
+    # pprint "$ICON_RAM  ${C_CYAN}Free Memory:  ${C_BOLD}${C_GREEN}${ram_free} GB${C_RESET}"
     echo -e "└─────────────────────────────────────────────┘"
   }
 
@@ -77,10 +94,10 @@ load_view() {
   set_git_branch_in_prompt() {
     source /usr/share/git/completion/git-prompt.sh 2>/dev/null ||
       source /etc/bash_completion.d/git-prompt 2>/dev/null
-    # local USER_HOST='\u@\h'
-    local WPATH='\w'
-    local GIT_PS1='$(__git_ps1 "(%s)")'
-    export PS1="${YELLOW}${WPATH}${BLUE}${GIT_PS1}${RESET}\$ "
+    # local user_host='\u@\h'
+    local wpath='\w'
+    local git_psi='$(__git_ps1 "(%s)")'
+    export PS1="${C_YELLOW}${wpath}${C_BLUE}${git_psi}${C_RESET}\$ "
   }
 
   print_logo
@@ -91,3 +108,4 @@ load_view() {
 if [[ $- == *i* ]]; then
   load_view
 fi
+unset -f load_view
