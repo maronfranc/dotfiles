@@ -6,4 +6,5 @@ function docker_ip() {
   docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name
 }
 
+alias docker-compose="docker compose"
 # alias kubectl="minikube kubectl -- "

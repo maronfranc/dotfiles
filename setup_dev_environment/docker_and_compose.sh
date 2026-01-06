@@ -1,5 +1,5 @@
 # Install Docker and docker-compose 
-sudo apt install -y docker docker.io docker-compose
+curl -fsSL https://get.docker.com | sudo sh
 
 # Add permission
 sudo groupadd docker
