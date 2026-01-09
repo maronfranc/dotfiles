@@ -73,7 +73,7 @@ load_view() {
     echo -e "│${C_YELLOW} ()      () ()()()()   ()()()()() ()      () ${C_RESET}│"
     echo -e "│${C_YELLOW} ()()  ()() ()      () ()         ()      () ${C_RESET}│"
     echo -e "│${C_YELLOW} () ()() () ()      () ()         ()      () ${C_RESET}│"
-    echo -e "│${C_YELLOW} ()      () ()      () ()()()()    ()    ()  ${C_RESET}│"
+    echo -e "│${C_YELLOW} ()  ()  () ()      () ()()()()    ()    ()  ${C_RESET}│"
     echo -e "│${C_YELLOW} ()      () ()      () ()           ()  ()   ${C_RESET}│"
     echo -e "│${C_YELLOW} ()      () ()      () ()            ()()    ${C_RESET}│"
     echo -e "│${C_YELLOW} ()      () ()()()()   ()()()()()     ()     ${C_RESET}│"

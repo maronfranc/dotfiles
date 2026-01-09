@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SEE list:https://www.nerdfonts.com/font-downloads
-# SEE used font: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.0/Hack.zip
+# SEE fonts: https://github.com/ryanoasis/nerd-fonts/releases
 
 font_dir=~/.fonts
 font_file_link="$font_dir/HackNerdFont-Regular.ttf"
