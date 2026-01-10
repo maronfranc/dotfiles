@@ -25,3 +25,9 @@ function gitget_name_and_email() {
   git config --global user.name
   git config --global user.email
 }
+
+function gitcommit_ammend() {
+  confirm_and_run \
+    "  ${ICON_RIGHT}Run:  ${C_CYAN}git commit --amend --no-edit${C_NC}?" \
+    git commit --amend --no-edit
+}
