@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-alias java_build="./gradlew build"
-alias java_spring_run="./gradlew bootRun"
+alias javabuild="./gradlew build"
+alias javaspring_run="./gradlew bootRun"
 alias springrun="./gradlew bootRun"

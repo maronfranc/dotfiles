@@ -1,5 +1,5 @@
 export HISTIGNORE="history*\
-:ls*:cd*:echo*\
+:ls*:cd*:echo*:cat*\
 :clear:exit\
 :node:python\
 :nvim*:tmux*:fe:nnn"

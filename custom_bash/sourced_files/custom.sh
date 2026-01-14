@@ -11,6 +11,7 @@ alias VISUAL="nvim"
 
 alias nvimeditor_config="cd $DOTFILE_DIR/../neovim-config/ && nvim"
 alias nvimdotfile_config="cd $DOTFILE_DIR && nvim"
+alias v="nvim"
 
 function listen_keys() {
   stdbuf -o0 showkey -a | cat -
