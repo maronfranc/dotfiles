@@ -2,7 +2,7 @@ export HISTIGNORE="history*\
 :ls*:cd*:echo*:cat*\
 :clear:exit\
 :node:python\
-:nvim*:tmux*:fe:nnn"
+:nvim*:tmux*:fe:nnn:v"
 
 # Use it in other file to append to a variable.
 # `append_unique HISTIGNORE "another_command*:cmd2"`
