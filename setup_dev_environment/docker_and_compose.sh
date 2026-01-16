@@ -1,4 +1,4 @@
-# Install Docker and docker-compose 
+# Install Docker and docker-compose
 curl -fsSL https://get.docker.com | sudo sh
 
 # Add permission

@@ -14,16 +14,16 @@ sudo apt update
 
 echo "Installing latest PHP and common extensions..."
 sudo apt install -y \
-  php \
-  php-cli \
-  php-common \
-  php-curl \
-  php-mbstring \
-  php-xml \
-  php-zip \
-  php-bcmath \
-  php-mysql \
-  php-sqlite3
+    php \
+    php-cli \
+    php-common \
+    php-curl \
+    php-mbstring \
+    php-xml \
+    php-zip \
+    php-bcmath \
+    php-mysql \
+    php-sqlite3
 
 echo "PHP version installed:"
 php -v
@@ -52,7 +52,7 @@ composer global require laravel/installer
 # Ensure Composer global bin is in PATH
 COMPOSER_BIN="$HOME/.config/composer/vendor/bin"
 if ! grep -q "$COMPOSER_BIN" ~/.bashrc; then
-    echo "export PATH=\"$COMPOSER_BIN:\$PATH\"" >> ~/.bashrc
+    echo "export PATH=\"$COMPOSER_BIN:\$PATH\"" >>~/.bashrc
 fi
 
 export PATH="$COMPOSER_BIN:$PATH"

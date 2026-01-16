@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SEE theme: 
+# SEE theme:
 #  - https://superfile.dev/list/theme-list/#_top
 #  - https://superfile.dev/configure/custom-theme/
 
@@ -19,7 +19,7 @@ spf() {
     command spf "$@"
     [ ! -f "$SPF_LAST_DIR" ] || {
         . "$SPF_LAST_DIR"
-        rm -f -- "$SPF_LAST_DIR" > /dev/null
+        rm -f -- "$SPF_LAST_DIR" >/dev/null
     }
 }
 

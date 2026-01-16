@@ -13,12 +13,12 @@ echo $answer
 # answer="${answer,,}" # to lower case
 
 case "$answer" in
-    [Yy]|[Yy][Ee][Ss])
-        fc-cache -fv
+[Yy] | [Yy][Ee][Ss])
+    fc-cache -fv
     ;;
-    # [Nn]|[Nn][Oo])
-    *)
-        echo "Fonts cache reload skipped."
+# [Nn]|[Nn][Oo])
+*)
+    echo "Fonts cache reload skipped."
     ;;
 esac
 

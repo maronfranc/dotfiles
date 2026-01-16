@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-set -e  # Exit on any error
-set -u  # Treat unset variables as errors
+set -e # Exit on any error
+set -u # Treat unset variables as errors
 
 REPO="ryanoasis/nerd-fonts"
 ASSET_PATTERN="Hack.tar.xz"
@@ -13,8 +13,8 @@ cd "$TMP_DIR"
 
 # Download latest Hack.tar.xz from GitHub releases
 # SEE: https://github.com/ryanoasis/nerd-fonts/releases
-DOWNLOAD_URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" \
-    | jq -r ".assets[] | select(.name | test(\"$ASSET_PATTERN\"; \"i\")) | .browser_download_url")
+DOWNLOAD_URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" |
+    jq -r ".assets[] | select(.name | test(\"$ASSET_PATTERN\"; \"i\")) | .browser_download_url")
 
 echo "Downloading $DOWNLOAD_URL ..."
 curl -L -o Hack.tar.xz "$DOWNLOAD_URL"

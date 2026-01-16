@@ -11,9 +11,9 @@ SOURCE_LINE="source \"$SOURCE_FILE\""
 
 # Append only if not already present
 if ! grep -Fxq "$SOURCE_LINE" "$BASHRC"; then
-    echo "" >> "$BASHRC"
-    echo "# Source custom files directory" >> "$BASHRC"
-    echo "$SOURCE_LINE" >> "$BASHRC"
+    echo "" >>"$BASHRC"
+    echo "# Source custom files directory" >>"$BASHRC"
+    echo "$SOURCE_LINE" >>"$BASHRC"
 
     echo "Added to ~/.bashrc:"
     echo "$SOURCE_LINE"

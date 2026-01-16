@@ -8,7 +8,7 @@ sudo apt autoremove autoclean clean
 # Dependencies
 sudo apt update
 sudo apt install git build-essential cmake git pkg-config libtool g++ libunibilium4 libunibilium-dev \
-ninja-build gettext libtool libtool-bin autoconf automake unzip curl doxygen lua-term lua-term-dev luarocks
+    ninja-build gettext libtool libtool-bin autoconf automake unzip curl doxygen lua-term lua-term-dev luarocks
 
 # Build
 git clone https://github.com/neovim/neovim "${PROGRAMS_DIR}/neovim"

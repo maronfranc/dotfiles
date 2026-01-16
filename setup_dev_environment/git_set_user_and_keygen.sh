@@ -15,12 +15,12 @@ prompt_input() {
 validate_email() {
     local email="$1"
     local email_regex='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    
+
     if [[ ! $email =~ $email_regex ]]; then
         echo "Invalid email format. Please try again."
         return 1
     fi
-    
+
     return 0
 }
 
@@ -53,9 +53,9 @@ done
 # • Background colors:
 # 40 to 47: Standard colors
 # 100 to 107: Bright colors
-GREEN='\033[0;32m'         
-BRIGHT_CYAN='\033[1;96m'   
-# LIGHT_GREEN='\033[1;32m'   
+GREEN='\033[0;32m'
+BRIGHT_CYAN='\033[1;96m'
+# LIGHT_GREEN='\033[1;32m'
 RESET='\033[0m'
 
 user_name_command="git config --global user.name \"${user_name}\""
@@ -68,8 +68,14 @@ echo -e "• Generating: ${BRIGHT_CYAN}${generated_ssh_command}${RESET}"
 echo "• ----- ----- ----- Run commands? ----- ----- ----- ----- "
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) echo "TODO: execute commands here..."; break;;
-        No ) echo "Exiting script..."; exit 0;;
+    Yes)
+        echo "TODO: execute commands here..."
+        break
+        ;;
+    No)
+        echo "Exiting script..."
+        exit 0
+        ;;
     esac
 done
 # Be cautious when using eval, as it can pose security risks if the variable contains untrusted input.

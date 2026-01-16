@@ -1,7 +1,6 @@
 #!/bin/bash
 
-while :
-do
+while :; do
     clear
     echo "Press [CTRL+C] to stop..."
     nvidia-smi
