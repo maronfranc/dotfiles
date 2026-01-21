@@ -26,8 +26,39 @@ function gitget_name_and_email() {
     git config --global user.email
 }
 
-function gitcommit_ammend() {
-    confirm_and_run \
-        "  ${ICON_RIGHT}Run:  ${C_CYAN}git commit --amend --no-edit${C_NC}?" \
-        git commit --amend --no-edit
+function gitlast_commit() {
+    git log -1 --date=format:'%Y-%m-%d %H:%M' \
+        --pretty=format:"%h %ad
+${C_CYAN}%s${C_NC}"
+}
+
+function gitstatus_staged() {
+    # Replace diff with -> `git status --short` for relative import path.
+    git diff --cached --name-status | grep '^[A-Z]' | awk \
+        -v C_BLUE="$C_BLUE" \
+        -v C_GREEN="$C_GREEN" \
+        -v C_RED="$C_RED" \
+        -v C_NC="$C_NC" '
+    {
+        status = substr($0, 1, 1)
+        if (status == "M")
+            printf "%s%s%s\n", C_BLUE, $0, C_NC
+        else if (status == "A")
+            printf "%s%s%s\n", C_GREEN, $0, C_NC
+        else if (status == "D")
+            printf "%s%s%s\n", C_RED, $0, C_NC
+        else
+            print $0
+    }'
+}
+
+function gitcommit_amend() {
+    local message="${ICON_RIGHT}Run:  ${C_CYAN}git commit --amend --no-edit${C_NC}?
+
+─────── Last commit ───────────────────
+$(gitlast_commit)
+─────── Staged files ── ─────── ───────
+${C_BLUE}$(gitstatus_staged)${C_NC}
+───────────────────────────────────────"
+    confirm_and_run "$message" git commit --amend --no-edit
 }
