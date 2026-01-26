@@ -40,6 +40,12 @@ load_view() {
     # Colorize temperature based on value
     color_temp() {
         local temp="$1"
+        
+        # Package `bc` is required to check temperature value.
+        if ! command -v bc >/dev/null 2>&1; then
+            echo "${temp}°C"
+            return 0
+        fi
 
         if (($(echo "$temp < 40" | bc -l))); then
             echo -e "${C_BLUE}${temp}°C${C_NC}"
@@ -112,6 +118,5 @@ load_view() {
     set_git_branch_in_prompt
 }
 
-# Ensure this script only runs in interactive shells
 load_view
 unset -f load_view

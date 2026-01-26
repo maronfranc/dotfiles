@@ -1,6 +1,6 @@
-# SEE: https://i3wm.org/docs/userguide.html
+## SEE: https://i3wm.org/docs/userguide.html
 font pango:Hack 9
-# set $alt Mod1
+set $alt Mod1
 set $mod Mod4
 set $term alacritty
 
@@ -11,8 +11,8 @@ set $term alacritty
 ####
 ########################################################################
 ########################################################################
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
+## Define names for default workspaces for which we configure key bindings later on.
+## We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -23,7 +23,7 @@ set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
-# Switch to workspace
+## Switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
 bindsym $mod+3 workspace number $ws3
@@ -34,7 +34,7 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
-# Move focused container to workspace
+## Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
@@ -46,31 +46,40 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
-# reload the configuration file
+## Reload the configuration file
 bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+## Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+## Exit i3 (logs you out of your X session)
+# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-# resize window (you can also use the mouse for that)
+## Resize window (you can also use the mouse for that)
 mode "resize" {
-        bindsym Left resize shrink width 5 px or 5 ppt
-        bindsym Down resize grow height 5 px or 5 ppt
-        bindsym Up resize shrink height 5 px or 5 ppt
-        bindsym Right resize grow width 5 px or 5 ppt
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+    # Back to normal: Enter, Escape, $mod+r, $mod+q.
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+    bindsym $mod+q mode "default"
+    ## These bindings trigger as soon as you enter the resize mode
+    ## Pressing (left|h)  will shrink the window’s width.
+    ## Pressing (down|j)  will grow the window’s height.
+    ## Pressing (up|k)    will shrink the window’s height.
+    ## Pressing (right|l) will grow the window’s width.
+    bindsym h     resize shrink width 10 px or 10 ppt
+    bindsym Left  resize shrink width 10 px or 10 ppt
+    bindsym j     resize grow height 10 px or 10 ppt
+    bindsym Down  resize grow height 10 px or 10 ppt
+    bindsym k     resize shrink height 10 px or 10 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym l     resize grow width 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
 }
 bindsym $mod+r mode "resize"
-
 
 ########################################################################
 ########################################################################
 ####
-####                   Floated windows
+####                   FLOATED WINDOWS
 ####
 ########################################################################
 ########################################################################
@@ -93,31 +102,32 @@ bindsym $mod+Return exec $term
 bindsym $mod+KP_Enter exec $term
 bindsym $mod+q kill
 bindsym $mod+Shift+x exec --no-startup-id xkill
-# Start program launcher
+bindsym $mod+Ctrl+$alt+Delete exec --no-startup-id systemctl poweroff
+## Start program launcher
 bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,run"
-
+bindsym Print exec --no-startup-id flameshot full
+bindsym Shift+Print exec --no-startup-id flameshot gui
+## Displays
 bindsym $mod+F6 exec --no-startup-id ~/000/display/both-displays.sh
 bindsym $mod+F7 exec --no-startup-id ~/000/display/laptop-only.sh
 bindsym $mod+F8 exec --no-startup-id ~/000/display/hdmi-only.sh
 
+##############################################################
+##                     NAVIGATION
+##############################################################
+bindsym $mod+s layout stacking
+bindsym $mod+e layout toggle split
+# bindsym $mod+w layout tabbed
+# bindsym $mod+Shift+w sticky toggle
+## Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+## Change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
 # bindsym $mod+h split h
 bindsym $mod+v split v
 bindsym $mod+t split toggle
 bindsym $mod+f fullscreen toggle
 
-bindsym $mod+s layout stacking
-# bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-# bindsym $mod+Shift+w sticky toggle
-
-# Toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
-# Change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
-
-##############################################################
-##                     NAVIGATION
-##############################################################
 bindsym $mod+h     focus left
 bindsym $mod+Left  focus left
 bindsym $mod+a     focus left
@@ -146,15 +156,15 @@ bindsym $mod+Shift+l     move right
 ##############################################################
 ##                     VOLUME
 ##############################################################
-# Increase/decrease
+## Increase/decrease
 bindsym XF86AudioRaiseVolume exec "pamixer -ui 5 && pamixer --get-volume > /tmp/xobpipe"
 bindsym Ctrl+Shift+period    exec "pamixer -ui 5 && pamixer --get-volume > /tmp/xobpipe"
 bindsym XF86AudioLowerVolume exec "pamixer -ud 5 && pamixer --get-volume > /tmp/xobpipe"
 bindsym Ctrl+Shift+comma     exec "pamixer -ud 5 && pamixer --get-volume > /tmp/xobpipe"
-# Mute/unmute output
+## Mute/unmute output
 bindsym XF86AudioMute exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
 bindsym Ctrl+Shift+m  exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
-# Toggle play/pause media
+## Toggle play/pause media
 bindsym Ctrl+Shift+k exec "playerctl play-pause" 
 
 ########################################################################
@@ -171,9 +181,11 @@ exec --no-startup-id redshift
 exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
-# USB device automount
+## Print screen
+# exec --no-startup-id flameshot
+## USB device automount
 exec --no-startup-id udiskie --tray --automount --notify
-# HDMI display
+## HDMI display
 exec --no-startup-id xrandr --output HDMI-1-0 --mode 2560x1080 --rate 60 --scale 1x1
 exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
 
@@ -182,7 +194,7 @@ exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
 ##############################################################
 exec_always --no-startup-id ~/.config/polybar/launch.sh
 
-# class                 border  backgr. text    indicator child_border
+## class                border  backgr. text    indicator child_border
 client.focused          #FFD700 #000000 #ffffff #000000   #000000
 client.focused_inactive #008888 #000000 #ffffff #000000   #000000
 client.unfocused        #008888 #000000 #888888 #000000   #000000
@@ -192,5 +204,5 @@ client.background       #ffffff
 
 # default_border pixel 1
 default_floating_border pixel 5
-# Hide sideways borders only
+## Hide sideways borders only
 hide_edge_borders both

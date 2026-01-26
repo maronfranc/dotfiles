@@ -5,6 +5,7 @@
 # git config --global user.email "email@example.com"
 # ssh-keygen -t ed25519 -C "email@example.com"
 # ```
+echo "WIP: this script is not running any command yet."
 
 prompt_input() {
     local prompt_message="$1"
@@ -24,7 +25,7 @@ validate_email() {
     return 0
 }
 
-echo "• Please provide the following git information:"
+echo "Please provide the following git information:"
 prompt_input "• Set your user.name: " user_name
 
 while true; do
@@ -61,11 +62,11 @@ RESET='\033[0m'
 user_name_command="git config --global user.name \"${user_name}\""
 user_email_command="git config --global user.email \"${user_email}\""
 generated_ssh_command="ssh-keygen -t ed25519 -C $user_email"
-echo "• ----- ----- Command that will be executed ----- ----- "
+echo "----- ----- Command that will be executed ----- ----- "
 echo -e "• Setting:    ${BRIGHT_CYAN}${user_name_command}${RESET}"
 echo -e "• Setting:    ${BRIGHT_CYAN}${user_email_command}${RESET}"
 echo -e "• Generating: ${BRIGHT_CYAN}${generated_ssh_command}${RESET}"
-echo "• ----- ----- ----- Run commands? ----- ----- ----- ----- "
+echo "----- ----- ----- Run commands? ----- ----- ----- ----- "
 select yn in "Yes" "No"; do
     case $yn in
     Yes)
