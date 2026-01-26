@@ -96,7 +96,7 @@ wrapping-scroll = true
 cursor-click = pointer
 
 modules-left = i3 xwindow info-hackspeed
-modules-center = networkdownload s1 networkupload s1 date s1 gpu s1 cpu s1 memory
+modules-center = networkdownload s1 networkupload s1 date s1 system-stats
 modules-right = s1 pulseaudio s1 wlan s1 updates s1 powermenu s1
 
 ;==========================================================
@@ -164,29 +164,11 @@ format-underline = #7fffd4
 ;==========================================================
 ;	Modules-center
 ;==========================================================
-[module/cpu]
-type = internal/cpu
-interval = 5
-format-prefix = "C:"
-format-prefix-foreground = #7fffd4
-format-underline = #7fffd4
-label = %percentage:2%%
-
-[module/memory]
-type = internal/memory
-interval = 5
-format-prefix = "M:"
-format-prefix-foreground = #87cefa
-format-underline = #87cefa
-label = %percentage_used%%
-
-[module/gpu]
+[module/system-stats]
 type = custom/script
-exec = ~/.config/polybar/scripts/nvidia-gpu-smi.sh
+exec = ~/.config/polybar/scripts/system-stats.sh
+format-underline = #7fffd4
 interval = 5
-format-prefix = "G:"
-format-prefix-foreground = #88AAD4
-format-underline = #88AAD4
 
 [module/date]
 type = internal/date
