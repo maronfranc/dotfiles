@@ -2,7 +2,7 @@
 
 # Global vars being used in other bash files
 # DOTFILE_DIR is "../"
-DOTFILE_DIR="$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")"
+DOTFILE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BASH_DIR="$DOTFILE_DIR/custom_bash"
 SOURCE_DIR="$BASH_DIR/sourced_files"
 

@@ -1,0 +1,360 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+; SEE: https://gitlab.com/sudaiv/elegant-polybar-for-i3wm/-/blob/master/config
+; SEE modules: https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
+;==========================================================
+
+[colors]
+background = #BCC3C3
+background-alt = #002B36
+foreground = #002B36
+foreground-alt = #BCC3C3
+primary = #ffb52a
+secondary = #e60053
+alert = #FF0000
+; Gold #FFCF15, #FFD700, #FFCF15
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+[settings]
+throttle-output = 5
+throttle-output-for = 10
+;throttle-input-for = 30
+screenchange-reload = true
+compositing-background = over
+compositing-foreground = over
+compositing-overline = over
+compositing-border = over
+
+[bar/example]
+monitor = ${env:MONITOR:}
+width = 100%
+height = 22
+radius = 0.0
+fixed-center = true
+top = false
+bottom = true
+override-redirect = false
+
+foreground = ${colors.foreground-alt}
+background = ${colors.background-alt}
+
+; Under-/overline pixel size and argb color
+; Individual values can be defined using:
+;   {overline,underline}-size
+;   {overline,underline}-color
+line-size = 1
+line-color = #dfdfdf
+
+border-top-size = 0
+border-bottom-size = 0
+border-left-size = 0
+border-right-size = 0
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 0
+module-margin-right = 0
+
+font-0 = "Liberation Mono:style=Bold Italic:size=10;3"
+font-1 = "FontAwesome:style=Regular:size=12;3"
+
+tray-position = right
+tray-padding = 0
+tray-detached = false
+tray-maxsize = 14
+tray-scale = 1.0
+tray-background = ${colors.background-alt}
+tray-foreground = ${colors.foreground-alt}
+tray-offset-x = 0
+tray-offset-y = 0
+
+wm-restack = i3
+
+scroll-up = #i3.next
+scroll-down = #i3.prev
+wrapping-scroll = true
+
+cursor-click = pointer
+
+modules-left = i3 xwindow info-hackspeed
+modules-center = networkdownload s1 networkupload s1 date s1 gpu s1 cpu s1 memory
+modules-right = s1 pulseaudio s1 wlan s1 updates s1 powermenu s1
+
+;==========================================================
+;	Modules
+;==========================================================
+[module/s1]
+type = custom/text
+content = " "
+content-background = ${colors.background-alt}
+; content = " | "
+; content-foreground = #93A1A1
+
+;==========================================================
+;	Modules-left
+;==========================================================
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+strip-wsnumbers = false
+enable-click = false
+enable-scroll = false
+
+label-mode = %mode%
+label-mode-padding = 1
+label-mode-foreground = ${colors.foreground-alt}
+label-mode-background = ${colors.background-alt}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-foreground = ${colors.foreground}
+label-focused-background = ${colors.background}
+label-focused-underline = ${colors.foreground-alt}
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = ${self.label-focused-padding}
+label-unfocused-foreground = ${colors.foreground-alt}
+label-unfocused-background = ${colors.background-alt}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-foreground = ${self.label-focused-background}
+label-visible-background = ${self.label-focused-foreground}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-foreground = ${colors.foreground}
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+; Separator in between workspaces
+label-separator =
+label-separator-padding = 0
+label-separator-foreground = #fff
+
+[module/xwindow]
+type = internal/xwindow
+label = " %title:-50:50:...%"
+format-underline = #7fffd4
+
+;==========================================================
+;	Modules-center
+;==========================================================
+[module/cpu]
+type = internal/cpu
+interval = 5
+format-prefix = "C:"
+format-prefix-foreground = #7fffd4
+format-underline = #7fffd4
+label = %percentage:2%%
+
+[module/memory]
+type = internal/memory
+interval = 5
+format-prefix = "M:"
+format-prefix-foreground = #87cefa
+format-underline = #87cefa
+label = %percentage_used%%
+
+[module/gpu]
+type = custom/script
+exec = ~/.config/polybar/scripts/nvidia-gpu-smi.sh
+interval = 5
+format-prefix = "G:"
+format-prefix-foreground = #88AAD4
+format-underline = #88AAD4
+
+[module/date]
+type = internal/date
+interval = 1
+date-color = #DAA520
+
+date = "%{F#9E9E9E}%a,%b-%{F-}%{F#FFFFFF}%d%{F-}"
+date-alt = 
+time = %{F#FFCF15}%H:%M%{F-}:%S
+time-alt = %H:%M:%S
+
+format-prefix = " "
+; format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-foreground = ${self.date-color}
+format-underline = ${self.date-color}
+
+label = %date% %time%
+
+[module/networkupload]
+type = internal/network
+interface = wlan0
+label-connected = "%upspeed:7%"
+format-connected = <label-connected>
+format-connected-prefix = " "
+format-connected-prefix-foreground = #fb0000
+format-connected-underline = #fb0000
+
+[module/networkdownload]
+type = internal/network
+interface = wlan0
+label-connected = "%downspeed:8%"
+format-connected = <label-connected>
+format-connected-prefix = " "
+format-connected-prefix-foreground = #00fb00
+format-connected-underline = #00fb00
+
+;==========================================================
+;	Modules-right
+;==========================================================
+[module/powermenu]
+type = custom/menu
+expand-right = true
+format-spacing = 1
+format-underline = #AAAAAA
+
+label-open = 
+label-open-foreground = #AAAAAA
+label-close =  Cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = 
+menu-0-0-foreground = #ff1200
+menu-0-0-exec = sh -c 'zenity --question --text="Power off?" && systemctl poweroff'
+menu-0-1 = 
+menu-0-1-foreground = #45ff00
+menu-0-1-exec = sh -c 'zenity --question --text="Reboot?" && systemctl reboot'
+menu-0-2 = 
+menu-0-2-foreground = #dfff00
+menu-0-2-exec = sh -c 'zenity --question --text="Suspend?" && systemctl suspend'
+menu-0-3 = 
+menu-0-3-foreground = #AAAAAA
+menu-0-3-exec = sh -c 'zenity --question --text="Lock screen?" && i3lock --blur 5'
+
+; [module/linux-ver]
+; type = custom/script
+; exec = uname -r
+; interval = 600
+
+[module/updates]
+type = custom/script
+exec = ~/.config/polybar/scripts/arch_updates.sh
+interval = 300
+label = " %output%"
+format-underline = ${colors.background}
+
+[module/wlan]
+; SEE: https://github.com/polybar/polybar/wiki/Module:-network
+type = internal/network
+interface = wlan0
+interval = 3.0
+
+; label-connected = "%{F#9E9E9E}(%signal%%)%essid%%{F-} %{F#00A000}%local_ip% %{F-}"
+label-connected = "%{F#9E9E9E}(%signal%%)%{F-} %{F#00A000}%local_ip% %{F-}"
+label-disconnected = "%{F#9E9E9E}  No WiFi%{F-}"
+format-connected-prefix = ""
+format-connected-prefix-foreground = #00A000
+format-connected-underline = #00A000
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+
+[module/pulseaudio]
+type = internal/pulseaudio
+pulse-color = #FF6347
+
+format-volume = <label-volume> <bar-volume>
+
+format-volume-prefix = " "
+format-volume-prefix-foreground = ${self.pulse-color}
+label-volume = %percentage%%
+label-volume-foreground = ${root.foreground}
+
+label-muted = " Muted"
+label-muted-foreground = #999
+label-muted-underline = #999
+
+bar-volume-width = 9
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #f5a70a
+bar-volume-foreground-4 = #f5a70a
+bar-volume-foreground-5 = #ff5555
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = ∳
+bar-volume-indicator-font = 3
+bar-volume-fill = 
+bar-volume-fill-font = 3
+bar-volume-empty = 
+bar-volume-empty-font = 3
+bar-volume-empty-foreground = ${colors.foreground-alt}
+format-volume-underline = ${self.pulse-color}
+
+;==========================================================
+;   Icons	
+;==========================================================
+;====== Common UI icons
+;    settings / cog 
+;    home 
+;    search
+;    user 
+;    power 
+;    download 
+;    upload 
+;    edit / pencil
+;    close / times 
+;    check / success 
+;    warning
+;    info 
+;    energy / lightning / bolt
+;    monitor 
+;    laptop 
+;    tv
+;    database
+; 󰍛   cpu
+; ☸︎
+;    microchip
+;    speed
+;    bars
+;====== Navigation & actions
+;    arrow left 
+;    arrow right 
+;    arrow up 
+;    arrow down
+;    refresh / reload 
+;    share 
+;    sync
+;====== Files & date
+;    file 
+;    file settings 
+;    file text
+;    folder 
+;    folder open 
+;    clipboard
+;====== Communication
+;    email 
+;    comments 
+;    phone 
+;    chat
