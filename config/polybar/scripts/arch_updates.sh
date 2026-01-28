@@ -29,4 +29,5 @@ if ! [[ $updates_arch =~ $re ]] ; then
    updates_aur=999; exit 1
 fi
 
-echo ":$updates_arch Y:$updates_aur"
+echo "• Pacman: $updates_arch"
+echo "• Aur: $updates_aur"

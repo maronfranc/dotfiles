@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 API="https://api.kraken.com/0/public/Ticker"
 
-fetch_price () {
+fetch_kraken () {
   local pair="$1"
   local key="$2"
 
@@ -10,8 +10,8 @@ fetch_price () {
     | LC_NUMERIC=C xargs printf "%.2f"
 }
 
-btc_price=$(fetch_price "BTCUSD" "XXBTZUSD")
-xmr_price=$(fetch_price "XMRUSD" "XXMRZUSD")
+btc_price=$(fetch_kraken "BTCUSD" "XXBTZUSD")
+xmr_price=$(fetch_kraken "XMRUSD" "XXMRZUSD")
 
-# ɱ$xmr_price
-echo "$btc_price|XMR $xmr_price"
+echo "BTC/USD \$$btc_price"
+echo "XMR/USD \$$xmr_price"
