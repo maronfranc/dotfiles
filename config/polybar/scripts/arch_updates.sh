@@ -29,4 +29,4 @@ if ! [[ $updates_arch =~ $re ]] ; then
    updates_aur=999; exit 1
 fi
 
-echo "P:$updates_arch Y:$updates_aur"
+echo ":$updates_arch Y:$updates_aur"

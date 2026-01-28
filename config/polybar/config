@@ -17,6 +17,7 @@
 ;==========================================================
 ; SEE: https://gitlab.com/sudaiv/elegant-polybar-for-i3wm/-/blob/master/config
 ; SEE modules: https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
+; NOTE: to enable mouse-enter `polybar -v` should have `+xcb +xcb-cursor +xcb-randr` features.
 ;==========================================================
 
 [colors]
@@ -30,8 +31,8 @@ alert = #FF0000
 ; Gold #FFCF15, #FFD700, #FFCF15
 
 [global/wm]
-margin-top = 5
-margin-bottom = 5
+margin-top = 0
+margin-bottom = 0
 
 [settings]
 throttle-output = 5
@@ -43,7 +44,7 @@ compositing-foreground = over
 compositing-overline = over
 compositing-border = over
 
-[bar/example]
+[bar/main-bar]
 monitor = ${env:MONITOR:}
 width = 100%
 height = 22
@@ -95,9 +96,9 @@ wrapping-scroll = true
 
 cursor-click = pointer
 
-modules-left = i3 xwindow info-hackspeed
+modules-left = i3 xwindow
 modules-center = networkdownload s1 networkupload s1 date s1 system-stats
-modules-right = s1 pulseaudio s1 wlan s1 updates s1 powermenu s1
+modules-right = pulseaudio s1 wlan s1 ticker-crypto s1 temperature s1 updates s1 powermenu s1 battery s1
 
 ;==========================================================
 ;	Modules
@@ -154,12 +155,12 @@ label-urgent-padding = 1
 ; Separator in between workspaces
 label-separator =
 label-separator-padding = 0
-label-separator-foreground = #fff
+label-separator-foreground = #FFFFFF
 
 [module/xwindow]
 type = internal/xwindow
 label = " %title:-50:50:...%"
-format-underline = #7fffd4
+format-underline = #7FFFD4
 
 ;==========================================================
 ;	Modules-center
@@ -167,7 +168,7 @@ format-underline = #7fffd4
 [module/system-stats]
 type = custom/script
 exec = ~/.config/polybar/scripts/system-stats.sh
-format-underline = #7fffd4
+format-underline = #7FFFD4
 interval = 5
 
 [module/date]
@@ -187,23 +188,47 @@ format-underline = ${self.date-color}
 
 label = %date% %time%
 
+[module/temperature]
+; SEE: https://github.com/polybar/polybar/wiki/Module:-temperature
+type = internal/temperature
+interval = 60
+thermal-zone = 0
+zone-type = x86_pkg_temp
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input
+; Base temperature for where to start the ramp (in degrees celsius)
+base-temperature = 20
+; Threshold temperature to display warning label (in degrees celsius)
+warn-temperature = 60
+units = true
+format = <ramp> <label>
+format-warn = <ramp> <label-warn>
+label = %temperature-c%
+label-warn = %temperature-c%
+label-warn-foreground = #f00
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-foreground = #CC3333
+
 [module/networkupload]
 type = internal/network
 interface = wlan0
+interval = 5
 label-connected = "%upspeed:7%"
 format-connected = <label-connected>
 format-connected-prefix = " "
-format-connected-prefix-foreground = #fb0000
-format-connected-underline = #fb0000
+format-connected-prefix-foreground = #FB0000
+format-connected-underline = #FB0000
 
 [module/networkdownload]
 type = internal/network
 interface = wlan0
+interval = 5
 label-connected = "%downspeed:8%"
 format-connected = <label-connected>
 format-connected-prefix = " "
-format-connected-prefix-foreground = #00fb00
-format-connected-underline = #00fb00
+format-connected-prefix-foreground = #00FB00
+format-connected-underline = #00FB00
 
 ;==========================================================
 ;	Modules-right
@@ -222,13 +247,13 @@ label-separator = |
 label-separator-foreground = ${colors.foreground-alt}
 
 menu-0-0 = 
-menu-0-0-foreground = #ff1200
+menu-0-0-foreground = #FF1200
 menu-0-0-exec = sh -c 'zenity --question --text="Power off?" && systemctl poweroff'
 menu-0-1 = 
-menu-0-1-foreground = #45ff00
+menu-0-1-foreground = #45FF00
 menu-0-1-exec = sh -c 'zenity --question --text="Reboot?" && systemctl reboot'
 menu-0-2 = 
-menu-0-2-foreground = #dfff00
+menu-0-2-foreground = #DFFF00
 menu-0-2-exec = sh -c 'zenity --question --text="Suspend?" && systemctl suspend'
 menu-0-3 = 
 menu-0-3-foreground = #AAAAAA
@@ -239,11 +264,56 @@ menu-0-3-exec = sh -c 'zenity --question --text="Lock screen?" && i3lock --blur 
 ; exec = uname -r
 ; interval = 600
 
+[module/battery]
+; SEE: https://github.com/polybar/polybar/wiki/Module:-battery
+type = internal/battery
+interval = 60
+full-at = 99
+low-at = 5
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT1
+adapter = ACAD
+poll-interval = 5
+time-format = %H:%M
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+;format-full = <ramp-capacity> <label-full>
+;format-low = <label-low> <animation-low>
+label-charging = Charging %percentage%%
+label-discharging = Discharging %percentage%%
+label-full = 
+label-low = "%{F#FF0000}BATTERY LOW%{F-}"
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+bar-capacity-width = 10
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+; Framerate in milliseconds
+animation-charging-framerate = 750
+; Only applies if <animation-discharging> is used
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-3 = 
+animation-discharging-4 = 
+; Framerate in milliseconds
+animation-discharging-framerate = 500
+animation-low-0 = !
+animation-low-1 = 
+animation-low-framerate = 200
+
 [module/updates]
 type = custom/script
 exec = ~/.config/polybar/scripts/arch_updates.sh
 interval = 300
-label = " %output%"
+label = "%output%"
 format-underline = ${colors.background}
 
 [module/wlan]
@@ -253,7 +323,7 @@ interface = wlan0
 interval = 3.0
 
 ; label-connected = "%{F#9E9E9E}(%signal%%)%essid%%{F-} %{F#00A000}%local_ip% %{F-}"
-label-connected = "%{F#9E9E9E}(%signal%%)%{F-} %{F#00A000}%local_ip% %{F-}"
+label-connected = "%{F#9E9E9E}(%signal%%)%{F-}%{F#00A000}%local_ip%%{F-}"
 label-disconnected = "%{F#9E9E9E}  No WiFi%{F-}"
 format-connected-prefix = ""
 format-connected-prefix-foreground = #00A000
@@ -263,11 +333,11 @@ format-disconnected = <label-disconnected>
 
 [module/pulseaudio]
 type = internal/pulseaudio
-pulse-color = #FF6347
+pulse-color = #F5A70A
 
 format-volume = <label-volume> <bar-volume>
 
-format-volume-prefix = " "
+format-volume-prefix = ""
 format-volume-prefix-foreground = ${self.pulse-color}
 label-volume = %percentage%%
 label-volume-foreground = ${root.foreground}
@@ -277,15 +347,15 @@ label-muted-foreground = #999
 label-muted-underline = #999
 
 bar-volume-width = 9
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #f5a70a
-bar-volume-foreground-4 = #f5a70a
-bar-volume-foreground-5 = #ff5555
-bar-volume-foreground-6 = #ff5555
+bar-volume-foreground-0 = #55AA55
+bar-volume-foreground-1 = #55AA55
+bar-volume-foreground-2 = #55AA55
+bar-volume-foreground-3 = #F5A70A
+bar-volume-foreground-4 = #F5A70A
+bar-volume-foreground-5 = #FF5555
+bar-volume-foreground-6 = #FF5555
 bar-volume-gradient = false
-bar-volume-indicator = ∳
+bar-volume-indicator = •
 bar-volume-indicator-font = 3
 bar-volume-fill = 
 bar-volume-fill-font = 3
@@ -293,6 +363,12 @@ bar-volume-empty = 
 bar-volume-empty-font = 3
 bar-volume-empty-foreground = ${colors.foreground-alt}
 format-volume-underline = ${self.pulse-color}
+
+[module/ticker-crypto]
+type = custom/script
+exec = ~/.config/polybar/scripts/ticker-crypto.sh
+interval = 600
+format-underline = #AAAAAA
 
 ;==========================================================
 ;   Icons	
@@ -316,7 +392,6 @@ format-volume-underline = ${self.pulse-color}
 ;    tv
 ;    database
 ; 󰍛   cpu
-; ☸︎
 ;    microchip
 ;    speed
 ;    bars
@@ -340,3 +415,9 @@ format-volume-underline = ${self.pulse-color}
 ;    comments 
 ;    phone 
 ;    chat
+;====== Temperature
+;  — thermometer-full (f2c7)
+;  — thermometer-three-quarters (f2c8)
+;  — thermometer-half (f2c9)
+;  — thermometer-quarter (f2ca)
+;  — thermometer-empty (f2cb)

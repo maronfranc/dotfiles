@@ -54,8 +54,8 @@ bindsym $mod+Shift+r restart
 # bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 ## Resize window (you can also use the mouse for that)
-mode "resize" {
-    # Back to normal: Enter, Escape, $mod+r, $mod+q.
+mode "RESIZE" {
+    ## Back to normal: Enter, Escape, $mod+r, $mod+q.
     bindsym Return mode "default"
     bindsym Escape mode "default"
     bindsym $mod+r mode "default"
@@ -66,15 +66,15 @@ mode "resize" {
     ## Pressing (up|k)    will shrink the window’s height.
     ## Pressing (right|l) will grow the window’s width.
     bindsym h     resize shrink width 10 px or 10 ppt
-    bindsym Left  resize shrink width 10 px or 10 ppt
+    bindsym Left  resize shrink width  5 px or  5 ppt
     bindsym j     resize grow height 10 px or 10 ppt
-    bindsym Down  resize grow height 10 px or 10 ppt
+    bindsym Down  resize grow height  5 px or  5 ppt
     bindsym k     resize shrink height 10 px or 10 ppt
-    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym Up    resize shrink height  5 px or  5 ppt
     bindsym l     resize grow width 10 px or 10 ppt
-    bindsym Right resize grow width 10 px or 10 ppt
+    bindsym Right resize grow width  5 px or  5 ppt
 }
-bindsym $mod+r mode "resize"
+bindsym $mod+r mode "RESIZE"
 
 ########################################################################
 ########################################################################
@@ -88,6 +88,9 @@ for_window [class="zenity"] floating enable
 for_window [class="pavucontrol"] floating enable
 # for_window [class="^.*"] border pixel 0 # border normal
 # for_window [class="TODO: picture-on-picture"] floating enable, sticky enable, move position 0 0, resize set 400 540
+# Always open steam on workspace 3
+assign [class="steam"] $ws3
+for_window [class="^steam_app_.*"] move to workspace $ws3
 
 ########################################################################
 ########################################################################
