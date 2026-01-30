@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
+# Source all `./bashrc_autoload/` files in `$HOME/.bashrc`.
 
-# Get the directory of this script (resolves symlinks too)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# File to be sourced (in the same directory)
-SOURCE_FILE="$SCRIPT_DIR/source_files.sh"
+SOURCE_FILE="$SCRIPT_DIR/bashrc-source-files.sh"
 
 BASHRC="$HOME/.bashrc"
 SOURCE_LINE="source \"$SOURCE_FILE\""

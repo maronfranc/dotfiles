@@ -3,8 +3,8 @@
 # Global vars being used in other bash files
 # DOTFILE_DIR is "../"
 DOTFILE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BASH_DIR="$DOTFILE_DIR/custom_bash"
-SOURCE_DIR="$BASH_DIR/sourced_files"
+BASH_DIR="$DOTFILE_DIR/script"
+SOURCE_DIR="$BASH_DIR/bashrc-autoload"
 
 # Source all files in $SOURCE_DIR directory.
 for file_path in "$SOURCE_DIR"/*; do
