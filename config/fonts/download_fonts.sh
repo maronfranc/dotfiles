@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
-set -e # Exit on any error
-set -u # Treat unset variables as errors
+# Strict mode: fail fast and loudly
+set -e          # stop on first error
+set -u          # disallow unset variables
+set -o pipefail # propagate pipeline failures
 
+# This script Download fonts and move to `~/.fonts/`.
+# Prompt asking to update cache run: `fc-cache -fv`.
+# To find the correct font NAME run: `fc-list | grep -i hack`.
+# SEE list:https://www.nerdfonts.com/font-downloads
+# SEE fonts:
+#   1. https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.0/Hack.zip
+#   2. https://github.com/source-foundry/Hack/tree/v3.003
 REPO="ryanoasis/nerd-fonts"
 ASSET_PATTERN="Hack.tar.xz"
 TMP_DIR="/tmp"
 FONT_DIR="$HOME/.fonts"
+# FONT_DIR="$HOME/.local/share/fonts"
 
 # Create font directory if it doesn't exist
 mkdir -p "$FONT_DIR"

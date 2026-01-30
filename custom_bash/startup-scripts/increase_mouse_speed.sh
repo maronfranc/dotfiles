@@ -6,7 +6,7 @@ mouse_id=$(xinput list | grep "USB OPTICAL MOUSE" | sed -n 's/.*id=\([0-9]*\).*/
 
 # Check if ID was found
 if [[ -n "$mouse_id" ]]; then
-    xinput set-prop "$mouse_id" "Coordinate Transformation Matrix" 2.75 0 0 0 2.75 0 0 0 1
+    xinput set-prop "$mouse_id" "Coordinate Transformation Matrix" 2.95 0 0 0 2.95 0 0 0 1
     # spd-say "Mouse speed increased."
 else
     # spd-say "Startup error: USB OPTICAL MOUSE not found"

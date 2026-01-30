@@ -169,6 +169,7 @@ bindsym XF86AudioMute exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[
 bindsym Ctrl+Shift+m  exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
 ## Toggle play/pause media
 bindsym Ctrl+Shift+k exec "playerctl play-pause" 
+bindsym Ctrl+Shift+i exec "playerctl stop" 
 
 ########################################################################
 ########################################################################
@@ -184,13 +185,11 @@ exec --no-startup-id redshift
 exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
-## Print screen
-# exec --no-startup-id flameshot
 ## USB device automount
 exec --no-startup-id udiskie --tray --automount --notify
+exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
 ## HDMI display
 exec --no-startup-id xrandr --output HDMI-1-0 --mode 2560x1080 --rate 60 --scale 1x1
-exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
 
 ##############################################################
 ##                     STATUS BAR

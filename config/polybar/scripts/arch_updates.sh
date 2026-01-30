@@ -13,13 +13,6 @@ fi
 
 updates=$(("$updates_arch" + "$updates_aur"))
 
-#if [ "$updates" -gt 0 ]; then
-#    echo "# $updates"
-#else
-#    echo ""
-#fi
-
-
 re='^[0-9]+$'
 if ! [[ $updates_arch =~ $re ]] ; then
    updates_aur=999; exit 1
@@ -29,5 +22,6 @@ if ! [[ $updates_arch =~ $re ]] ; then
    updates_aur=999; exit 1
 fi
 
-echo "• Pacman: $updates_arch"
-echo "• Aur: $updates_aur"
+echo "• Uname-r: $(uname -r)"
+echo "• Pacman:  $updates_arch"
+echo "• AUR:     $updates_aur"

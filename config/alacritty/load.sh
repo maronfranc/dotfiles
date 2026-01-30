@@ -11,7 +11,6 @@ ln -s $(pwd)/alacritty.toml $alacritty_file
 read -rp "Do you want to reload cached fonts? [y/n]: " answer
 echo $answer
 # answer="${answer,,}" # to lower case
-
 case "$answer" in
 [Yy] | [Yy][Ee][Ss])
     fc-cache -fv
