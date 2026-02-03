@@ -53,13 +53,22 @@ bindsym $mod+Shift+r restart
 ## Exit i3 (logs you out of your X session)
 # bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-## Resize window (you can also use the mouse for that)
+set $resize_id 9999
+## Resize window (you can also use the mouse for that).
 mode "RESIZE" {
-    ## Back to normal: Enter, Escape, $mod+r, $mod+q.
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-    bindsym $mod+r mode "default"
-    bindsym $mod+q mode "default"
+    ## Back to normal removing notification: Enter, Escape, $mod+r, $mod+q.
+    bindsym Return \
+        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        ; mode "default"
+    bindsym Escape \
+        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        ; mode "default"
+    bindsym $mod+r \
+        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        ; mode "default"
+    bindsym $mod+q \
+        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        ; mode "default"
     ## These bindings trigger as soon as you enter the resize mode
     ## Pressing (left|h)  will shrink the window’s width.
     ## Pressing (down|j)  will grow the window’s height.
@@ -74,7 +83,14 @@ mode "RESIZE" {
     bindsym l     resize grow width 10 px or 10 ppt
     bindsym Right resize grow width  5 px or  5 ppt
 }
-bindsym $mod+r mode "RESIZE"
+## Start RESIZE mode and emit permanent dunst notification.
+bindsym $mod+r \
+    exec --no-startup-id dunstify \
+        --replace=$resize_id \
+        --timeout=0 \
+        "Resize mode" \
+        "[⬅️h/l➡️]: Width  [⬇️j/k⬆️]: Height [Enter/Esc/mod+r/mod+q]: Exit" \
+    ; mode "RESIZE"
 
 ########################################################################
 ########################################################################
