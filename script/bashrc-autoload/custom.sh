@@ -12,6 +12,7 @@ alias VISUAL="nvim"
 alias nvimeditor_config="cd $DOTFILE_DIR/../neovim-config/ && nvim"
 alias nvimdotfile_config="cd $DOTFILE_DIR && nvim"
 alias v="nvim"
+alias notetemp="nvim /tmp/$(date '+%Y-%m-%d_%H-%M-%S').md"
 
 function listen_keys() {
     stdbuf -o0 showkey -a | cat -

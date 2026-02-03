@@ -80,8 +80,8 @@ bindsym $mod+r mode "RESIZE"
 ########################################################################
 ####
 ####                   FLOATED WINDOWS
-####
 ########################################################################
+#### Get class names with: `xprop | grep WM_CLASS`
 ########################################################################
 for_window [class="mpv"] floating enable
 for_window [class="zenity"] floating enable
@@ -90,6 +90,7 @@ for_window [class="pavucontrol"] floating enable
 # for_window [class="TODO: picture-on-picture"] floating enable, sticky enable, move position 0 0, resize set 400 540
 # Always open steam on workspace 3
 assign [class="steam"] $ws3
+for_window [class="steam"] floating enable
 for_window [class="^steam_app_.*"] move to workspace $ws3
 
 ########################################################################
@@ -111,9 +112,7 @@ bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,
 bindsym Print exec --no-startup-id flameshot full
 bindsym Shift+Print exec --no-startup-id flameshot gui
 ## Displays
-bindsym $mod+F6 exec --no-startup-id ~/000/display/both-displays.sh
-bindsym $mod+F7 exec --no-startup-id ~/000/display/laptop-only.sh
-bindsym $mod+F8 exec --no-startup-id ~/000/display/hdmi-only.sh
+bindsym $mod+F8 exec --no-startup-id ~/.local/bin/display-menu-display-picker
 
 ##############################################################
 ##                     NAVIGATION
@@ -122,7 +121,6 @@ bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
 # bindsym $mod+w layout tabbed
 # bindsym $mod+Shift+w sticky toggle
-## Toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 ## Change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -178,7 +176,8 @@ bindsym Ctrl+Shift+i exec "playerctl stop"
 ####
 ########################################################################
 ########################################################################
-exec --no-startup-id "i3-msg 'workspace 1; exec alacritty'"
+# Open browser vertically in stacking mode.
+exec --no-startup-id i3-msg 'workspace 1; exec brave; [class="brave-browser"] focus; split v; layout stacking'
 exec --no-startup-id dunst
 exec --no-startup-id picom
 exec --no-startup-id redshift
@@ -188,8 +187,7 @@ exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
 ## USB device automount
 exec --no-startup-id udiskie --tray --automount --notify
 exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
-## HDMI display
-exec --no-startup-id xrandr --output HDMI-1-0 --mode 2560x1080 --rate 60 --scale 1x1
+exec --no-startup-id exec ~/.local/bin/display-mirror
 
 ##############################################################
 ##                     STATUS BAR
