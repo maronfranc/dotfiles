@@ -2,7 +2,7 @@
 set -e
 
 DOTFILE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-# Source helper function
+# Source `confirm_and_run` helper function.
 source "$DOTFILE_DIR/custom_bash/sourced_files/bash_functions.sh"
 
 DELETE_TARGET="$HOME/.config/polybar"
