@@ -180,7 +180,8 @@ bindsym XF86AudioLowerVolume exec "pamixer -ud 5 && pamixer --get-volume > /tmp/
 bindsym Ctrl+Shift+comma     exec "pamixer -ud 5 && pamixer --get-volume > /tmp/xobpipe"
 ## Mute/unmute output
 bindsym XF86AudioMute exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
-bindsym Ctrl+Shift+m  exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
+## Mute/unmute input
+bindsym Ctrl+Shift+m exec "amixer sset Capture toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
 ## Toggle play/pause media
 bindsym Ctrl+Shift+k exec "playerctl play-pause" 
 bindsym Ctrl+Shift+i exec "playerctl stop" 
