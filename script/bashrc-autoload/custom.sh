@@ -3,16 +3,9 @@
 if [[ -z "$DOTFILE_DIR" ]]; then echo "DOTFILE_DIR var is empty"; fi
 if [[ -z "$SOURCE_DIR" ]]; then echo "SOURCE_DIR var is empty"; fi
 
-alias EDITOR="nvim"
-alias VISUAL="nvim"
-# Open `man` with neovim
-# SEE: https://www.reddit.com/r/neovim/comments/g7ymvv/do_you_use_neovim_for_reading_your_man_pages/
-# export MANPAGER='nvim +Man!' export MANWIDTH=999
-
 alias nvimeditor_config="cd $DOTFILE_DIR/../neovim-config/ && nvim"
 alias nvimdotfile_config="cd $DOTFILE_DIR && nvim"
 alias v="nvim"
-alias notetemp="nvim /tmp/$(date '+%Y-%m-%d_%H-%M-%S').md"
 
 function listen_keys() {
     stdbuf -o0 showkey -a | cat -

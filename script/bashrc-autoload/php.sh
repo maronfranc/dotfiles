@@ -1,4 +1,6 @@
 # alias createlaravel_project="composer create-project laravel/laravel"
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
+
 createlaravel_project() {
     local placeholder="<placeholder-project-name>"
     local C_GRAY="\e[90m"
@@ -22,3 +24,5 @@ createlaravel_project() {
     echo "Creating Laravel project: $project_name"
     composer create-project laravel/laravel "$project_name"
 }
+
+alias composer_install="composer install --no-dev --prefer-dist"

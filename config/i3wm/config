@@ -123,6 +123,7 @@ bindsym $mod+KP_Enter exec $term
 bindsym $mod+q kill
 bindsym $mod+Shift+x exec --no-startup-id xkill
 bindsym $mod+Ctrl+$alt+Delete exec --no-startup-id systemctl poweroff
+bindsym $mod+Ctrl+$alt+End exec --no-startup-id systemctl suspend
 ## Start program launcher
 bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,run"
 bindsym Print exec --no-startup-id flameshot full
@@ -193,18 +194,20 @@ bindsym Ctrl+Shift+i exec "playerctl stop"
 ####
 ########################################################################
 ########################################################################
-# Open browser vertically in stacking mode.
-exec --no-startup-id i3-msg 'workspace 1; exec brave; [class="brave-browser"] focus; split v; layout stacking'
+exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id dunst
 exec --no-startup-id picom
 exec --no-startup-id redshift
-exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
+exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
+exec_always --no-startup-id ~/.local/bin/redshift-schedule
+exec --no-startup-id exec ~/.local/bin/display-mirror
+## Open browser vertically in stacking mode.
+exec --no-startup-id i3-msg 'workspace 1; exec brave; [class="brave-browser"] focus; split v; layout stacking'
 ## USB device automount
 exec --no-startup-id udiskie --tray --automount --notify
-exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
-exec --no-startup-id exec ~/.local/bin/display-mirror
+## Enable vertical notification bar on screen.
+exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
 
 ##############################################################
 ##                     STATUS BAR

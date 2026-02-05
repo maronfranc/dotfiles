@@ -3,6 +3,14 @@ export HISTIGNORE="history*\
 :clear:exit\
 :node:python\
 :nvim*:tmux*:fe:nnn:v"
+export HISTCONTROL=ignoredups
+
+# Open `man` with neovim
+# SEE: https://www.reddit.com/r/neovim/comments/g7ymvv/do_you_use_neovim_for_reading_your_man_pages/
+# export MANPAGER='nvim +Man!' export MANWIDTH=999
+export TERMINAL="alacritty"
+export EDITOR="nvim"
+export VISUAL="nvim"
 
 # Use it in other file to append to a variable.
 # `append_unique HISTIGNORE "another_command*:cmd2"`
