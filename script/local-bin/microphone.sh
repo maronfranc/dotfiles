@@ -30,21 +30,21 @@ case "$1" in
         else
             VOL=$(get_volume)
             dunstify -u low -r $NOTIFY_ID "Microphone" "Unmuted (${VOL}%)" -i microphone-sensitivity-high
-            send_xob "$VOL"
+            # send_xob "$VOL"
         fi
         exit 0
-        ;;
+    ;;
     up)
         pactl set-source-mute "$SOURCE" 0
         pactl set-source-volume "$SOURCE" +${STEP}%
         VOL=$(get_volume)
         send_xob "$VOL"
-        ;;
+    ;;
     down)
         pactl set-source-volume "$SOURCE" -${STEP}%
         VOL=$(get_volume)
         send_xob "$VOL"
-        ;;
+    ;;
 esac
 
 # Polybar output

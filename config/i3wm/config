@@ -129,6 +129,7 @@ bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,
 bindsym Print exec --no-startup-id flameshot full
 bindsym Shift+Print exec --no-startup-id flameshot gui
 ## Displays
+bindsym $mod+F7 exec --no-startup-id ~/.local/bin/display-hdmi-only
 bindsym $mod+F8 exec --no-startup-id ~/.local/bin/display-menu-display-picker
 
 ##############################################################
@@ -182,7 +183,7 @@ bindsym Ctrl+Shift+comma     exec "pamixer -ud 5 && pamixer --get-volume > /tmp/
 ## Mute/unmute output
 bindsym XF86AudioMute exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
 ## Mute/unmute input
-bindsym Ctrl+Shift+m exec "amixer sset Capture toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
+bindsym Ctrl+Shift+m exec ~/.local/bin/microphone toggle
 ## Toggle play/pause media
 bindsym Ctrl+Shift+k exec "playerctl play-pause" 
 bindsym Ctrl+Shift+i exec "playerctl stop" 
@@ -198,10 +199,13 @@ exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id dunst
 exec --no-startup-id picom
-exec --no-startup-id redshift
 exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
-exec_always --no-startup-id ~/.local/bin/redshift-schedule
+exec --no-startup-id redshift
+# exec_always
+exec --no-startup-id ~/.local/bin/redshift-schedule
 exec --no-startup-id exec ~/.local/bin/display-mirror
+## Replace keyboard numpad "," with ".".
+exec --no-startup-id setxkbmap -option kpdl:dot
 ## Open browser vertically in stacking mode.
 exec --no-startup-id i3-msg 'workspace 1; exec brave; [class="brave-browser"] focus; split v; layout stacking'
 ## USB device automount

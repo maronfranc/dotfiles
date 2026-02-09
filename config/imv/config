@@ -1,0 +1,39 @@
+# SEE: https://man.archlinux.org/man/imv.1.en
+[options]
+fullscreen = false
+loop_input = true
+overlay = true
+
+#DEFAULT BINDS
+# q Quit
+# Left arrow Previous image
+# Right arrow Next Image
+# gg Go to first image
+# G Go to last image
+# j Pan down
+# k Pan up
+# h Pan left
+# l Pan right
+# x Close current image
+# f Toggle fullscreen
+# d Toggle overlay
+# p Print current image to stdout
+# Up arrow Zoom in
+# Down arrow Zoom out
+# i Zoom in
+# o Zoom out
+# + Zoom in
+# - Zoom out
+# Ctrl+r Rotate clockwise by 90 degrees
+# c Center image
+# s Next scaling mode
+# S Next upscaling mode
+# a Zoom to actual size
+# r Reset zoom and pan
+# . Next frame (for animations)
+# Space Pause/play animations
+# t Start slideshow/increase delay by 1 second
+# T Stop slideshow/decrease delay by 1 second
+[binds]
+n = next
+p = prev

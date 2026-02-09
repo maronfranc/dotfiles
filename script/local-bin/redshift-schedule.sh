@@ -8,10 +8,10 @@ redshift -P -O 6500
 while true; do
     now=$(date +%H)
 
+    # Start gradual warming (manual control).
     case "$now" in
         "20")
-            # Start gradual warming (manual control).
-            redshift -p -o 4500
+            redshift -P -O 4500
         ;;
         "21")
             redshift -P -O 3800

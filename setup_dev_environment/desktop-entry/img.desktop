@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Image Viewer (img)
+Exec=/home/main/.local/bin/img %F
+MimeType=image/jpeg;image/png;image/webp;image/gif;image/bmp;image/tiff;image/avif;
+NoDisplay=true
