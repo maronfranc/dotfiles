@@ -26,3 +26,18 @@ createlaravel_project() {
 }
 
 alias composer_install="composer install --no-dev --prefer-dist"
+
+phpart() {
+  local dir="$PWD"
+
+  while [[ "$dir" != "/" ]]; do
+    if [[ -f "$dir/artisan" ]]; then
+      php "$dir/artisan" "$@"
+      return
+    fi
+    dir="$(dirname "$dir")"
+  done
+
+  echo "artisan: not inside a Laravel project"
+  return 1
+}

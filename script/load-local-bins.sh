@@ -13,7 +13,6 @@ TARGET="$HOME/.local/bin"
 # Common safety setting for scripts that process file paths
 IFS=$'\n\t'
 
-rm -rf "$TARGET"
 mkdir -p "$TARGET"
 
 # Ensure all shell scripts are executable.
@@ -27,5 +26,6 @@ while IFS= read -r -d '' f; do
     name="${rel_path//\//-}"
     # Keep keep basename.
     name="${name%.*}"
+    rm -rf "$TARGET/$name"
     ln -sf "$f" "$TARGET/$name"
 done

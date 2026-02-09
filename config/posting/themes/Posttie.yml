@@ -1,0 +1,41 @@
+# SEE: https://github.com/darrenburns/posting/discussions/60
+name: Posttie
+primary: '#f2d5cf'
+secondary: '#a6e3a1'
+accent: '#06f5c0'
+background: '#000000'
+surface: '#232634'
+error: '#d20f39'
+success: '#40a02b'
+warning: '#fe640b'
+
+text_area:
+  cursor: 'reverse'
+  cursor_line: 'underline bold #06f5c0'
+  selection: 'reverse'
+  gutter: '#ff008b'
+  matched_bracket: 'black on #a6e3a1'
+url:
+  base: 'bold #4a78e6'
+  protocol: 'bold #73dc8c'
+  separator: 'bold #4a78e6'
+syntax:
+  json_key: '#fa9afa'
+  json_number: '#8cb4cd'
+  json_string: '#73dc8c'
+  json_boolean: '#ffa24e'
+  json_null: '#4a74de'
+method:
+  get: '#73dc8c'
+  post: '#dbde52'
+  put: '#ffa24e'
+  delete: '#ff665b'
+  patch: '#ffa24e'
+  options: '#8cb4cd'
+  head: '#73dc8c'
+variable:
+  resolved: 'bold #ffa24e'
+  unresolved: 'dim #ffa24e'
+
+author: Arturo Villalobos
+description: Cool theme partially inspired by the HTTPie color scheme.

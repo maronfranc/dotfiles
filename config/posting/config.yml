@@ -1,0 +1,20 @@
+# SEE origin: https://github.com/darrenburns/posting
+# FILE PATH: $HOME/.config/posting/config.yaml
+theme: Posttie
+editor: vim # SEE: https://posting.sh/guide/external_tools/
+# pager: less
+# pager_json: fx
+
+heading: # SEE: https://darren.codes/posts/posting2/
+  hostname: "[#DDDDDD on #1E1E9E bold blink]dev_hostname[/]"
+
+focus: # SEE : https://posting.sh/guide/navigation/
+  on_startup: "collection" # "body", "tabs" (Default: unset)
+  # on_response: "" # "body", "tabs" (Default: unset)
+  # on_request_open: "" # "headers", "body", "query",
+  #                     # "info", "url", "method" (Default: unset)
+
+keymap:
+  quit: ctrl+q
+#   # SEE: https://posting.sh/guide/keymap/
+#   send-request: ctrl+r,ctrl+i,ctrl+j 
