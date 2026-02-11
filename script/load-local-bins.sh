@@ -19,6 +19,9 @@ mkdir -p "$TARGET"
 find "$SRC" -type f -name '*.sh' -exec chmod +x {} +
 
 # Look for all script inside $SRC and prepend dir path with `-`
+# For example:
+#   param: `./local-bin/hardware/display/mirror.sh`
+#   return: `$TARGET/hardware-display-mirror`
 find "$SRC" -type f -executable -print0 |
 while IFS= read -r -d '' f; do
     rel_path="${f#$SRC/}"

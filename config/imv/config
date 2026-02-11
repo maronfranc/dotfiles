@@ -36,4 +36,4 @@ overlay = true
 # T Stop slideshow/decrease delay by 1 second
 [binds]
 n = next
-p = prev
+b = prev

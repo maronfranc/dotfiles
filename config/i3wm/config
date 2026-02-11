@@ -56,7 +56,7 @@ bindsym $mod+Shift+r restart
 set $resize_id 9999
 ## Resize window (you can also use the mouse for that).
 mode "RESIZE" {
-    ## Back to normal removing notification: Enter, Escape, $mod+r, $mod+q.
+    ## Enter, Escape, $mod+r, $mod+q: Back to normal removing notification.
     bindsym Return \
         exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
         ; mode "default"
@@ -74,14 +74,14 @@ mode "RESIZE" {
     ## Pressing (down|j)  will grow the window’s height.
     ## Pressing (up|k)    will shrink the window’s height.
     ## Pressing (right|l) will grow the window’s width.
-    bindsym h     resize shrink width 10 px or 10 ppt
-    bindsym Left  resize shrink width  5 px or  5 ppt
-    bindsym j     resize grow height 10 px or 10 ppt
-    bindsym Down  resize grow height  5 px or  5 ppt
-    bindsym k     resize shrink height 10 px or 10 ppt
-    bindsym Up    resize shrink height  5 px or  5 ppt
-    bindsym l     resize grow width 10 px or 10 ppt
-    bindsym Right resize grow width  5 px or  5 ppt
+    bindsym h     resize shrink width   5 px or  5 ppt
+    bindsym Left  resize shrink width  10 px or 10 ppt
+    bindsym j     resize grow height    5 px or  5 ppt
+    bindsym Down  resize grow height   10 px or 10 ppt
+    bindsym k     resize shrink height  5 px or  5 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym l     resize grow width     5 px or  5 ppt
+    bindsym Right resize grow width    10 px or 10 ppt
 }
 ## Start RESIZE mode and emit permanent dunst notification.
 bindsym $mod+r \
@@ -121,7 +121,7 @@ floating_modifier $mod
 bindsym $mod+Return exec $term
 bindsym $mod+KP_Enter exec $term
 bindsym $mod+q kill
-bindsym $mod+Shift+x exec --no-startup-id xkill
+bindsym Ctrl+Shift+x exec --no-startup-id xkill
 bindsym $mod+Ctrl+$alt+Delete exec --no-startup-id systemctl poweroff
 bindsym $mod+Ctrl+$alt+End exec --no-startup-id systemctl suspend
 ## Start program launcher
@@ -129,8 +129,8 @@ bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,
 bindsym Print exec --no-startup-id flameshot full
 bindsym Shift+Print exec --no-startup-id flameshot gui
 ## Displays
-bindsym $mod+F7 exec --no-startup-id ~/.local/bin/display-hdmi-only
-bindsym $mod+F8 exec --no-startup-id ~/.local/bin/display-menu-display-picker
+bindsym $mod+F7 exec --no-startup-id ~/.local/bin/hardware-display-hdmi-only
+bindsym $mod+F8 exec --no-startup-id ~/.local/bin/hardware-display-menu-display-picker
 
 ##############################################################
 ##                     NAVIGATION
@@ -173,18 +173,17 @@ bindsym $mod+Shift+d     move right
 bindsym $mod+Shift+l     move right
 
 ##############################################################
-##                     VOLUME
+##                     AUDIO
 ##############################################################
-## Increase/decrease
-bindsym XF86AudioRaiseVolume exec "pamixer -ui 5 && pamixer --get-volume > /tmp/xobpipe"
-bindsym Ctrl+Shift+period    exec "pamixer -ui 5 && pamixer --get-volume > /tmp/xobpipe"
-bindsym XF86AudioLowerVolume exec "pamixer -ud 5 && pamixer --get-volume > /tmp/xobpipe"
-bindsym Ctrl+Shift+comma     exec "pamixer -ud 5 && pamixer --get-volume > /tmp/xobpipe"
-## Mute/unmute output
-bindsym XF86AudioMute exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > /tmp/xobpipe"
-## Mute/unmute input
-bindsym Ctrl+Shift+m exec ~/.local/bin/microphone toggle
-## Toggle play/pause media
+## Output: increase|decrease|mute|unmute.
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/bin/hardware-audio-output up
+bindsym Ctrl+Shift+period    exec --no-startup-id ~/.local/bin/hardware-audio-output up
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/hardware-audio-output down
+bindsym Ctrl+Shift+comma     exec --no-startup-id ~/.local/bin/hardware-audio-output down
+bindsym XF86AudioMute        exec --no-startup-id ~/.local/bin/hardware-audio-output toggle
+## Input: Mute|unmute.
+bindsym Ctrl+Shift+m exec --no-startup-id ~/.local/bin/hardware-microphone toggle
+## Media: Toggle play|pause.
 bindsym Ctrl+Shift+k exec "playerctl play-pause" 
 bindsym Ctrl+Shift+i exec "playerctl stop" 
 
@@ -199,11 +198,9 @@ exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id dunst
 exec --no-startup-id picom
-exec --no-startup-id feh --bg-fill ~/.config/i3/wallpaper.webp
 exec --no-startup-id redshift
-# exec_always
-exec --no-startup-id ~/.local/bin/redshift-schedule
-exec --no-startup-id exec ~/.local/bin/display-mirror
+exec --no-startup-id ~/.local/bin/hardware-redshift-schedule
+exec --no-startup-id exec ~/.local/bin/hardware-display-mirror
 ## Replace keyboard numpad "," with ".".
 exec --no-startup-id setxkbmap -option kpdl:dot
 ## Open browser vertically in stacking mode.
@@ -212,6 +209,8 @@ exec --no-startup-id i3-msg 'workspace 1; exec brave; [class="brave-browser"] fo
 exec --no-startup-id udiskie --tray --automount --notify
 ## Enable vertical notification bar on screen.
 exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
+
+exec_always --no-startup-id feh --randomize --bg-fill --slideshow-delay 300 ~/Pictures/Wallpapers
 
 ##############################################################
 ##                     STATUS BAR
