@@ -207,9 +207,6 @@ exec --no-startup-id setxkbmap -option kpdl:dot
 exec --no-startup-id i3-msg 'workspace 1; exec brave; [class="brave-browser"] focus; split v; layout stacking'
 ## USB device automount
 exec --no-startup-id udiskie --tray --automount --notify
-## Enable vertical notification bar on screen.
-exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
-
 exec_always --no-startup-id feh --randomize --bg-fill --slideshow-delay 300 ~/Pictures/Wallpapers
 
 ##############################################################

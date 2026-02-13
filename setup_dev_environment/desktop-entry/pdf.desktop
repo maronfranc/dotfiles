@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=MuPDF (Interactive)
+Comment=View PDF files with Zathura.
+Exec=zathura %f
+# OR: Exec=mupdf -I %f
+Terminal=false
+Type=Application
+MimeType=application/pdf;
+Icon=zathura
+Categories=Office;Viewer;
+StartupNotify=false

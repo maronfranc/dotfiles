@@ -1,0 +1,30 @@
+# Configuration for `zathura zathura-pdf-mupdf`
+# DEPRECATED: set page-padding 40
+# TODO: add page separator padding.
+set adjust-open "width" # "best-fit"
+
+# ===== ===== Key map ===== ===== #
+map <C-i> recolor # Toggle night mode
+map n navigate next
+map p navigate previous
+map + zoom in
+map - zoom out
+map = zoom in
+map 0 zoom original
+
+# ===== ===== Theme ===== ===== #
+set default-bg "#000000"
+set default-fg "#CDD6F4"
+
+# ===== ===== Dark theme ===== ===== #
+set recolor true # Start in night mode.
+set recolor-keephue true
+set recolor-reverse-video true
+set recolor-darkcolor "#CDD6F4"
+set recolor-lightcolor "#1E1E2E"
+
+# ===== ===== Status bar ===== ===== #
+set statusbar-bg "#11111B"
+set statusbar-fg "#CDD6F4"
+set inputbar-bg "#11111B"
+set inputbar-fg "#CDD6F4"
