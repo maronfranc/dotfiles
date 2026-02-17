@@ -2,6 +2,7 @@
 # DEPRECATED: set page-padding 40
 # TODO: add page separator padding.
 set adjust-open "width" # "best-fit"
+set selection-clipboard clipboard
 
 # ===== ===== Key map ===== ===== #
 map <C-i> recolor # Toggle night mode
@@ -11,6 +12,8 @@ map + zoom in
 map - zoom out
 map = zoom in
 map 0 zoom original
+map f copy_link # Copy link instead of follow link.
+map F follow    # Open link.
 
 # ===== ===== Theme ===== ===== #
 set default-bg "#000000"
