@@ -2,6 +2,7 @@
 font pango:Hack 9
 set $alt Mod1
 set $mod Mod4
+set $pagedown Next
 set $term alacritty
 
 ########################################################################
@@ -124,6 +125,7 @@ bindsym $mod+q kill
 bindsym Ctrl+Shift+x exec --no-startup-id xkill
 bindsym $mod+Ctrl+$alt+Delete exec --no-startup-id systemctl poweroff
 bindsym $mod+Ctrl+$alt+End exec --no-startup-id systemctl suspend
+bindsym $mod+Ctrl+$alt+$pagedown exec --no-startup-id systemctl reboot
 ## Start program launcher
 bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,run"
 bindsym Print exec --no-startup-id flameshot full

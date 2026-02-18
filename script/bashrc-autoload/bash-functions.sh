@@ -21,3 +21,12 @@ confirm_and_run() {
         return 1
     fi
 }
+
+function listen_keys() {
+    stdbuf -o0 showkey -a | cat -
+}
+
+function random_string() {
+    tr -dc A-Za-z0-9 </dev/urandom | head -c 13
+    echo
+}

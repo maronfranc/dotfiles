@@ -34,7 +34,7 @@ ${C_CYAN}%s${C_NC}"
 
 function gitstatus_staged() {
     # Replace diff with -> `git status --short` for relative import path.
-    git diff --cached --name-status | grep '^[A-Z]' | awk \
+    local staged_files=$(git diff --cached --name-status | grep '^[A-Z]' | awk \
         -v C_BLUE="$C_BLUE" \
         -v C_GREEN="$C_GREEN" \
         -v C_RED="$C_RED" \
@@ -49,7 +49,14 @@ function gitstatus_staged() {
             printf "%s%s%s\n", C_RED, $0, C_NC
         else
             print $0
-    }'
+    }')
+
+    if [[ -z "${staged_files}" ]]; then
+        echo "No file in git stage."
+        return
+    fi
+
+    echo "$staged_files"
 }
 
 function gitcommit_amend() {

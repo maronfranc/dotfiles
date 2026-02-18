@@ -32,3 +32,14 @@ while IFS= read -r -d '' f; do
     rm -rf "$TARGET/$name"
     ln -sf "$f" "$TARGET/$name"
 done
+
+# Run delete command and capture output (suppress direct printing).
+deleted_links=$(find "$TARGET" -xtype l -print -delete)
+# -xtype l → finds symbolic links whose targets do not exist (broken symlinks).
+# -print   → prints each deleted symlink.
+# -delete  → removes them.
+# Check if anything was deleted
+if [ -n "$deleted_links" ]; then
+  echo "Deleted the following broken symlinks:"
+  echo "$deleted_links"
+fi
