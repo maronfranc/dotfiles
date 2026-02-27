@@ -1,5 +1,5 @@
 [global]
-### Display ###
+# ===== ===== Display ===== ===== ###
 monitor = 0
 # Display notification on focused monitor. Possible modes are:
 # mouse: follow mouse pointer
@@ -19,14 +19,14 @@ offset = (0, 108) # ~10% from bottom on a 1080p screen
 scale = 0
 notification_limit = 5
 
-### Progress bar ###
+# ===== ===== Progress bar ===== ===== ###
 progress_bar = true
 progress_bar_height = 8
 progress_bar_frame_width = 1
 progress_bar_min_width = 150
 progress_bar_max_width = 300
 
-### Appearance ###
+# ===== ===== Appearance ===== ===== ###
 # This option will only work if a compositing windowmanager is present (e.g. xcompmgr, compiz, etc..)
 transparency = 25 # Slight transparency (0–100)
 corner_radius = 25
@@ -46,7 +46,7 @@ padding = 10
 horizontal_padding = 12
 text_icon_padding = 8
 
-### Text ###
+# ===== ===== Text ===== ===== ###
 font = Hack 10
 line_height = 0
 # allow a small subset of html markup:
@@ -67,7 +67,7 @@ ignore_newline = false
 # set to -1 to disable
 show_age_threshold = 60
 
-### Icons ###
+# ===== ===== Icons ===== ===== ###
 enable_recursive_icon_lookup = true
 icon_position = left
 min_icon_size = 32
@@ -75,15 +75,15 @@ max_icon_size = 48
 # Check valid icons `ls ~/.icons ; ls /usr/share/icons`
 icon_theme = Adwaita
 
-### History ###
+# ===== ===== History ===== ===== ###
 history_length = 50
 
-### Mouse ###
+# ===== ===== Mouse ===== ===== ###
 mouse_left_click = do_action, close_current
 mouse_middle_click = close_all
 mouse_right_click = close_current
 
-### Misc ###
+# ===== ===== Misc ===== ===== ###
 # always_run_script = true
 # Don't remove messages, if the user is idle (no mouse or keyboard input)
 # for longer than idle_threshold seconds.

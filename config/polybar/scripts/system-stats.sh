@@ -26,9 +26,9 @@ color_temperature() {
     fi
 }
 
-mem_color=$(color_temperature mem)
-cpu_color=$(color_temperature cpu)
-gpu_color=$(color_temperature gpu)
+mem_color=$(color_temperature "$mem")
+cpu_color=$(color_temperature "$cpu")
+gpu_color=$(color_temperature "$gpu")
 
 echo "\
 %{A1:i3-msg 'exec --no-startup-id $on_click_command':}\
