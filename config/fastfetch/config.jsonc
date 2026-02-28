@@ -1,0 +1,140 @@
+// SEE: https://github.com/fastfetch-cli/fastfetch/blob/dev/presets/examples/10.jsonc
+// SEE: https://github.com/fastfetch-cli/fastfetch/blob/dev/presets/examples/17.jsonc
+// SEE: https://github.com/fastfetch-cli/fastfetch/blob/dev/presets/examples/28.jsonc
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "none"
+  },
+  "display": {
+    "separator": " ➡️ ",
+
+    "color": {
+      "separator": "white"
+    },
+    "bar": {
+      "width": 20, // Width of percentage bars.
+      "border": {
+        "left": "\uee00",
+        "leftElapsed": "\uee03",
+        "right": "\uee02",
+        "rightElapsed": "\uee05"
+      },
+      "char": {
+        "total": "\uee01",
+        "elapsed": "\uee04"
+      },
+      "color": {
+        "border": "dim_white",
+        "total": "dim_white"
+      }
+    },
+    "percent": {
+      "type": [
+        "bar",
+        "bar-monochrome"
+      ]
+    },
+    "constants": [
+      "───────────────────────────────────────────────────────────────────────────",
+      // Codes:
+      // - \u001b[75C :ESC [ 75 C
+      // - \u001b[36m: cyan color
+      // - \u001b[0m: reset color
+      // Sequence:
+      //  1. Print │.
+      //  2. Move 75 columns right.
+      //  3. Print │.
+      //  4. Move 75 columns left.
+      "\u001b[36m│\u001b[75C│\u001b[75D\u001b[0m", // {$2}: 2x75 characters spaces.
+      "\u001b[1m", // {$3}: Start bold.
+      "\u001b[0m" // {$4}: Reset bold.
+    ]
+  },
+  "modules": [
+    {
+      "format": "{#1}{#keys}╭{$1}╮\u001b[76D {user-name-colored}{at-symbol-colored}{host-name-colored} 🖥  ",
+      "type": "title"
+    },
+    // ===== ===== Hardware group. ===== ===== //   
+    {
+      "type": "host",
+      "key": "{$2}{#33}{$3}󰌢 Hardware{$4}"
+    },
+    {
+      "type": "gpu",
+      "key": "{$2}{#33}├󰍛 gpu   ",
+      "temp": true
+    },
+    {
+      "type": "cpu",
+      "key": "{$2}{#33}├󰻠 cpu   ",
+      "showPeCoreCount": true,
+      "temp": true
+    },
+    {
+      "type": "cpuusage",
+      "key": "{$2}{#33}│└usage  "
+    },
+    {
+      "key": "{$2}{#33}├ disk  ",
+      "type": "disk",
+      "showExternal": true,
+      "folders": "/"
+    },
+    {
+      "type": "swap",
+      "key": "{$2}{#33}├󰑭 swap  "
+    },
+    {
+      "key": "{$2}{#33}└ memory",
+      "type": "memory"
+    },
+    {
+      // This is a `{type: "break"}` with borders
+      "type": "custom",
+      "format": "{$2}"
+    },
+    // ===== ===== Media group. ===== ===== //   
+    {
+      "type": "custom",
+      // Not using `key` here to prevent `display.separator`.
+      // - \u001b = escape character
+      // - [1m = bold
+      // - [0m = reset
+      "format": "{#36}{$2}{#32}󰥠 {$3}Input/output{$4}"
+    },
+    {
+      "type": "sound",
+      "key": "{$2}{#32}├ headphone"
+    },
+    {
+      "type": "camera",
+      "key": "{$2}{#32}└󰵝 camera   "
+    },
+    {
+      // This is a `{type: "break"}` with borders
+      "type": "custom",
+      "format": "{$2}"
+    },
+    // ===== ===== Other group. ===== ===== //   
+    {
+      "key": "{$2}{#31}󰩟 network   ",
+      "type": "localip",
+      "format": "{ipv4} ({ifname})"
+    },
+    // ===== ===== Color group. ===== ===== //   
+    {
+      "format": "{#1}{#keys}├{$1}┤",
+      "type": "custom"
+    },
+    {
+      "type": "custom",
+      "format": "{$2} {#90}  {#31}  {#32}  {#33}  {#34}  {#35}  {#36}  {#37}  {#38}  {#39}          {#38}  {#37}  {#36}  {#35}  {#34}  {#33}  {#32}  {#31}  {#90}  "
+    },
+    {
+      "format": "{#1}{#keys}╰{$1}╯",
+      "type": "custom"
+    }
+  ]
+}
