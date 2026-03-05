@@ -15,21 +15,16 @@ select_options() {
 CONTAINER_NAME="$1"
 ACTION="$2"
 
+# Get running containers names
+containers=$(docker ps --format "{{.Names}}" 2>/dev/null)
+if [[ -z "$containers" ]]; then
+    echo "No running containers found."
+    exit 1
+fi
+
 # Only prompt for selection if variables are empty
 if [[ -z "$CONTAINER_NAME" ]]; then
-    # Get running containers names
-    containers=$(docker ps --format "{{.Names}}" 2>/dev/null)
-    if [[ -z "$containers" ]]; then
-        echo "No running containers found."
-        exit 1
-    fi
-
     CONTAINER_NAME=$(echo "$containers" | select_options "Select container:")
-    
-    if [[ -z "$CONTAINER_NAME" ]]; then
-        echo "Usage: $0 <container_name> <on|off|status>"
-        exit 1
-    fi
 fi
 
 # Validate that the container exists

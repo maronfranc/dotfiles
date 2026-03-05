@@ -59,37 +59,46 @@ set $resize_id 9999
 mode "RESIZE" {
     ## Enter, Escape, $mod+r, $mod+q: Back to normal removing notification.
     bindsym Return \
-        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        exec --no-startup-id dunstify --replace=$resize_id --timeout=1 "" \
         ; mode "default"
     bindsym Escape \
-        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        exec --no-startup-id dunstify --replace=$resize_id --timeout=1 "" \
         ; mode "default"
     bindsym $mod+r \
-        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        exec --no-startup-id dunstify --replace=$resize_id --timeout=1 "" \
         ; mode "default"
     bindsym $mod+q \
-        exec --no-startup-id dunstify --replace=9999 --timeout=1 "" \
+        exec --no-startup-id dunstify --replace=$resize_id --timeout=1 "" \
         ; mode "default"
-    ## These bindings trigger as soon as you enter the resize mode
+    ## These bindings trigger as soon as you enter the resize mode.
     ## Pressing (left|h)  will shrink the window’s width.
     ## Pressing (down|j)  will grow the window’s height.
     ## Pressing (up|k)    will shrink the window’s height.
     ## Pressing (right|l) will grow the window’s width.
     bindsym h     resize shrink width   5 px or  5 ppt
-    bindsym Left  resize shrink width  10 px or 10 ppt
     bindsym j     resize grow height    5 px or  5 ppt
-    bindsym Down  resize grow height   10 px or 10 ppt
     bindsym k     resize shrink height  5 px or  5 ppt
-    bindsym Up    resize shrink height 10 px or 10 ppt
     bindsym l     resize grow width     5 px or  5 ppt
+    bindsym Left  resize shrink width  10 px or 10 ppt
+    bindsym Down  resize grow height   10 px or 10 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
     bindsym Right resize grow width    10 px or 10 ppt
+    ## Move floating windows.
+    bindsym $mod+h     move left   5 ppt
+    bindsym $mod+j     move down   5 ppt
+    bindsym $mod+k     move up     5 ppt
+    bindsym $mod+l     move right  5 ppt
+    bindsym $mod+Left  move left  10 ppt
+    bindsym $mod+Down  move down  10 ppt
+    bindsym $mod+Up    move up    10 ppt
+    bindsym $mod+Right move right 10 ppt
 }
 ## Start RESIZE mode and emit permanent dunst notification.
 bindsym $mod+r \
     exec --no-startup-id dunstify \
         --replace=$resize_id \
         --timeout=0 \
-        "Resize mode" \
+        "Resize|Move mode" \
         "[⬅️h/l➡️]: Width  [⬇️j/k⬆️]: Height [Enter/Esc/mod+r/mod+q]: Exit" \
     ; mode "RESIZE"
 

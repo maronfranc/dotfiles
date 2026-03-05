@@ -6,9 +6,23 @@
   "logo": {
     "type": "none"
   },
+  // "custom": {
+  //   "Audio Input": {
+  //     "type": "custom",
+  //     "exec": "pactl list sources short | grep -v 'dummy' | head -n 5",
+  //     "format": "<volume_bar> {input_status}",
+  //     "bar": {
+  //       "percent": {
+  //         "type": [
+  //           "bar",
+  //           "bar-monochrome"
+  //         ]
+  //       }
+  //     }
+  //   }
+  // },
   "display": {
     "separator": " ➡️ ",
-
     "color": {
       "separator": "white"
     },
@@ -63,37 +77,49 @@
     },
     {
       "type": "gpu",
-      "key": "{$2}{#33}├󰍛 gpu   ",
+      "key": "{$2}{#33}├ gpu    ",
       "temp": true
     },
     {
+      "type": "vulkan",
+      "key": "{$2}{#33}│└󰻠 vulkan"
+    },
+    // {
+    //   "type": "opencl",
+    //   "key": "{$2}{#33}│├󰻠 opencl"
+    // },
+    // {
+    //   "type": "opengl",
+    //   "key": "{$2}{#33}│└󰻠 opengl"
+    // },
+    {
       "type": "cpu",
-      "key": "{$2}{#33}├󰻠 cpu   ",
+      "key": "{$2}{#33}├󰍛 cpu    ",
       "showPeCoreCount": true,
       "temp": true
     },
+    // TODO: merge this with cpu
     {
       "type": "cpuusage",
-      "key": "{$2}{#33}│└usage  "
+      "key": "{$2}{#33}│└󰝪 usage "
     },
     {
-      "key": "{$2}{#33}├ disk  ",
+      "key": "{$2}{#33}├ disk   ",
       "type": "disk",
       "showExternal": true,
       "folders": "/"
     },
     {
       "type": "swap",
-      "key": "{$2}{#33}├󰑭 swap  "
+      "key": "{$2}{#33}├󰑭 swap   "
     },
     {
-      "key": "{$2}{#33}└ memory",
+      "key": "{$2}{#33}└ memory ",
       "type": "memory"
     },
     {
-      // This is a `{type: "break"}` with borders
       "type": "custom",
-      "format": "{$2}"
+      "format": "{$2}" // This is a `{type: "break"}` with borders
     },
     // ===== ===== Media group. ===== ===== //   
     {
@@ -106,22 +132,26 @@
     },
     {
       "type": "sound",
-      "key": "{$2}{#32}├ headphone"
+      "key": "{$2}{#32}├ sound ",
+      "soundType": "active"
     },
     {
       "type": "camera",
-      "key": "{$2}{#32}└󰵝 camera   "
+      "key": "{$2}{#32}└󰵝 camera"
     },
     {
-      // This is a `{type: "break"}` with borders
       "type": "custom",
-      "format": "{$2}"
+      "format": "{$2}" // This is a `{type: "break"}` with borders
     },
     // ===== ===== Other group. ===== ===== //   
     {
-      "key": "{$2}{#31}󰩟 network   ",
       "type": "localip",
+      "key": "{$2}{#31}󰩟 network  ",
       "format": "{ipv4} ({ifname})"
+    },
+    {
+      "type": "processes",
+      "key": "{$2}{#31} processes"
     },
     // ===== ===== Color group. ===== ===== //   
     {
@@ -130,11 +160,18 @@
     },
     {
       "type": "custom",
-      "format": "{$2} {#90}  {#31}  {#32}  {#33}  {#34}  {#35}  {#36}  {#37}  {#38}  {#39}          {#38}  {#37}  {#36}  {#35}  {#34}  {#33}  {#32}  {#31}  {#90}  "
+      "format": "{$2}    {#90}  {#31}  {#32}  {#33}  {#34}  {#35}  {#36}  {#37}  {#38}  {#39}          {#38}  {#37}  {#36}  {#35}  {#34}  {#33}  {#32}  {#31}  {#90}"
     },
     {
       "format": "{#1}{#keys}╰{$1}╯",
       "type": "custom"
     }
+    // TODO: check if is possible to create a command module with `key`, `format` outputs.
+    // {
+    //   "type": "command",
+    //   "parallel": true,
+    //   "key": "{$2}{#32}└{icon_here} command",
+    //   "text": "echo 'my command output'"
+    // },
   ]
 }
