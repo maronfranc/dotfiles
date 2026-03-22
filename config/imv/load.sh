@@ -4,13 +4,13 @@ set -e          # Stop on first error
 set -u          # Disallow unset variables
 set -o pipefail # Propagate pipeline failures
 
-TARGET_DIR="$HOME/.config/zathura"
-FILE="zathurarc"
+TARGET_DIR="$HOME/.config/imv"
+FILE="config"
 
 SRC="$PWD/$FILE"
 TARGET="$TARGET_DIR/$FILE"
 
 mkdir -p "$TARGET_DIR"
 
-rm -rf "$TARGET" 
-ln -sf "$SRC" "$TARGET" 
+rm -rf "$TARGET"
+ln -s "$SRC" "$TARGET"

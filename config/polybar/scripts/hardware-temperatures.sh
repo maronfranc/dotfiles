@@ -15,7 +15,7 @@ color_temp() {
     
     # Package `bc` is required to check temperature value.
     if ! command -v bc >/dev/null 2>&1; then
-        echo "${n}"
+        echo ""
         return 0
     fi
 

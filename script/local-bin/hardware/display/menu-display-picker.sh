@@ -6,22 +6,22 @@ options="\
  Laptop_only\n\
 󰍹  HDMI_only\n\
 󰍺  Side_by_side\n\
-󱞟  Mirror\
+󱞟  Mirror_all_connected\
 "
 
 chosen=$(echo -e "$options" | $rofi_cmd)
 
 case "$chosen" in
   *HDMI_only*)
-    ~/.local/bin/display-hdmi-only
+    ~/.local/bin/hardware-display-hdmi-only
   ;;
   *Laptop_only*)
-    ~/.local/bin/display-laptop-only
+    ~/.local/bin/hardware-display-laptop-only
   ;;
   *Side_by_side*)
-    ~/.local/bin/display-side-by-side
+    ~/.local/bin/hardware-display-side-by-side
   ;;
-  *Mirror*)
-    ~/.local/bin/display-mirror
+  *Mirror_all_connected*)
+    ~/.local/bin/hardware-display-mirror-all-connected
   ;;
 esac

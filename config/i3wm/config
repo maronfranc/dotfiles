@@ -142,6 +142,8 @@ bindsym Shift+Print exec --no-startup-id flameshot gui
 ## Displays
 bindsym $mod+F7 exec --no-startup-id ~/.local/bin/hardware-display-hdmi-only
 bindsym $mod+F8 exec --no-startup-id ~/.local/bin/hardware-display-menu-display-picker
+## Window transparency
+bindsym $mod+b exec --no-startup-id ~/.config/picom/script/toggle_window_transparency.sh
 
 ##############################################################
 ##                     NAVIGATION
@@ -211,7 +213,7 @@ exec --no-startup-id dunst
 exec --no-startup-id picom
 exec --no-startup-id redshift
 exec --no-startup-id ~/.local/bin/hardware-redshift-schedule
-exec --no-startup-id exec ~/.local/bin/hardware-display-mirror
+# exec --no-startup-id exec ~/.local/bin/hardware-display-mirror-all-connected
 ## Replace keyboard numpad "," with ".".
 exec --no-startup-id setxkbmap -option kpdl:dot
 ## Open browser vertically in stacking mode.

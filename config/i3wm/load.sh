@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-SRC="$PWD/config"
-TARGET="$HOME/.config/i3/config"
+FILE="config"
+
+SRC="$PWD/$FILE"
+TARGET="$HOME/.config/i3/$FILE"
 
 rm -rf "$TARGET"
 ln -s "$SRC" "$TARGET"
