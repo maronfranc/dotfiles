@@ -1,0 +1,61 @@
+# --- Environment ---
+# TODO: 
+env = TERM=xterm-256color
+env = WINIT_X11_SCALE_FACTOR=1
+
+# --- Window ---
+window-decoration = false
+background-opacity = 0.5
+window-padding-x = 0
+window-padding-y = 0
+
+# --- Scrolling ---
+scrollback-limit = 10000
+
+# --- Colors (Nord-like) ---
+foreground = #D8DEE9
+background = #2E3440
+
+palette = 0=#3B4252
+palette = 1=#BF616A
+palette = 2=#A3BE8C
+palette = 3=#EBCB8B
+palette = 4=#81A1C1
+palette = 5=#B48EAD
+palette = 6=#88C0D0
+palette = 7=#E5E9F0
+
+palette = 8=#4C566A
+palette = 9=#BF616A
+palette = 10=#A3BE8C
+palette = 11=#EBCB8B
+palette = 12=#81A1C1
+palette = 13=#B48EAD
+palette = 14=#8FBCBB
+palette = 15=#ECEFF4
+
+bold-is-bright = true
+
+# --- Font ---
+font-family = monospace
+font-size = 12
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+
+# --- Cursor ---
+# bar, block, underline, block_hollow
+cursor-style = bar 
+
+# --- Selection ---
+copy-on-select = true
+unsafe_paste = false
+
+# --- Mouse ---
+mouse-hide-while-typing = true
+
+# --- TODO: Keybindings ---
+
+# --- General ---
+working-directory = none
