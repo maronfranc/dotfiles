@@ -50,7 +50,7 @@ cursor-style = bar
 
 # --- Selection ---
 copy-on-select = true
-unsafe_paste = false
+clipboard-paste-protection = false
 
 # --- Mouse ---
 mouse-hide-while-typing = true
