@@ -137,8 +137,8 @@ bindsym $mod+Ctrl+$alt+End exec --no-startup-id systemctl suspend
 bindsym $mod+Ctrl+$alt+$pagedown exec --no-startup-id systemctl reboot
 ## Start program launcher
 bindsym $mod+o exec "rofi -show combi -modi window,run,combi -combi-modi window,run"
-bindsym Print exec --no-startup-id flameshot full
-bindsym Shift+Print exec --no-startup-id flameshot gui
+bindsym Print exec --no-startup-id flameshot gui
+bindsym Shift+Print exec --no-startup-id flameshot full
 ## Displays
 bindsym $mod+F7 exec --no-startup-id ~/.local/bin/hardware-display-hdmi-only
 bindsym $mod+F8 exec --no-startup-id ~/.local/bin/hardware-display-menu-display-picker

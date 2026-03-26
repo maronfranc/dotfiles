@@ -26,10 +26,30 @@ function gitget_name_and_email() {
     git config --global user.email
 }
 
-function gitlast_commit() {
-    git log -1 --date=format:'%Y-%m-%d %H:%M' \
-        --pretty=format:"%h %ad
-${C_CYAN}%s${C_NC}"
+function gitlog() {
+    local date_format="%Y-%m-%d ${C_BOLD}%H:%M"
+    # - `%ad`: Date
+    # - `%h`: Commit hash
+    # - `%s`: Commit message
+    local msg_format="%ad ${C_GRAY_DARK}%h${C_NC} ${C_CYAN}%s${C_NC}"
+
+    git log \
+        --date=format:"$date_format" \
+        --pretty=format:"$msg_format" \
+        "$@"
+}
+
+function gitunpushed_commits() {
+    local current_branch=$(git branch --show-current)
+    local commits=$(gitlog \
+        origin/"$current_branch"..HEAD \
+        2>/dev/null)
+
+    if [[ -z "$commits" ]]; then
+        echo "${C_GRAY}No unpushed commits.${C_NC}"
+    else
+        echo "$commits"
+    fi
 }
 
 function gitstatus_staged() {
@@ -52,7 +72,7 @@ function gitstatus_staged() {
     }')
 
     if [[ -z "${staged_files}" ]]; then
-        echo "No file in git stage."
+        echo -e "${C_BOLD}${C_GRAY_DARK}No file in git stage.${C_NC}"
         return
     fi
 
@@ -63,9 +83,37 @@ function gitcommit_amend() {
     local message="${ICON_RIGHT}Run:  ${C_CYAN}git commit --amend --no-edit${C_NC}?
 
 ─────── Last commit ───────────────────
-$(gitlast_commit)
-─────── Staged files ── ─────── ───────
+$(gitlog -1)
+─────── Staged files ──────────────────
 ${C_BLUE}$(gitstatus_staged)${C_NC}
 ───────────────────────────────────────"
     confirm_and_run "$message" git commit --amend --no-edit
+}
+
+function gitpush_origin() {
+    local current_branch=$(git branch --show-current)
+    local commits_ahead=$(git rev-list --count HEAD...origin/$current_branch)
+    if [[ "$commits_ahead" -eq 0 ]]; then
+        echo "Nothing to push. All commits are already pushed to origin."
+        echo "─────── Last commit ───────────────────"
+        echo "$(gitlog -1)"
+        return 0
+    fi
+
+    local C_1=$C_CYAN
+    local C_2=$C_YELLOW
+    local message="${ICON_RIGHT}Run:  ${C_BOLD}${C_CYAN}git push origin $current_branch${C_NC}?
+
+╭─────── ${C_1}Git${C_NC} ───────────────────────────────╮
+│• User name:  ${C_BOLD}$(git config --global user.name)${C_NC}
+│• User email: ${C_BOLD}$(git config --global user.email)${C_NC}
+├─────── ${C_1}Branch${C_NC} ────────────────────────────┤
+│• ${C_BOLD}${C_CYAN}${current_branch}${C_NC}
+├─────── ${C_2}Staged files (forgot to commit?)${C_NC} ──┤
+│$(gitstatus_staged)
+├─────── ${C_2}Commits to push!${C_NC} ──────────────────┤
+$(gitunpushed_commits)
+╰───────────────────────────────────────────╯"
+
+    confirm_and_run "$message" git push origin "$current_branch"
 }
