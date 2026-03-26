@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=mpv
+Comment=Video player based on MPlayer and mplayer2
+Exec=mpv %U
+Terminal=false
+Type=Application
+Icon=mpv
+Categories=AudioVideo;Video;Player;Recorder;
+MimeType=video/*;audio/*;image/*;
