@@ -22,6 +22,30 @@ ICON_ERROR=""
 ICON_INFO=""
 ICON_RIGHT="➡️"
 
+
+# pprint accepts a param and wrap it with "│" at 50 length.
+pprint() {
+    local LENGTH_MINUS_ONE=49
+    local LENGTH_MINUS_TWO=48
+    local param="$1"
+    # Remove all ANSI color codes and escape sequences to get actual length.
+    local clean_param=$(echo "$param" | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+    local len=${#clean_param}
+
+    local result="│${param}"
+    # Add second vertical bar only if there length is space.
+    if [ $len -lt $LENGTH_MINUS_ONE ]; then
+        # Calculate position where we need to add the second bar.
+        local spaces=""
+        for ((i = len; i < $LENGTH_MINUS_TWO; i++)); do
+            spaces="${spaces} "
+        done
+        result="│${param}${spaces}│"
+    fi
+
+    echo "$result"
+}
+
 set_git_branch_in_prompt() {
     source /usr/share/git/completion/git-prompt.sh 2>/dev/null ||
         source /etc/bash_completion.d/git-prompt 2>/dev/null

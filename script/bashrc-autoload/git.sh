@@ -80,40 +80,71 @@ function gitstatus_staged() {
 }
 
 function gitcommit_amend() {
-    local message="${ICON_RIGHT}Run:  ${C_CYAN}git commit --amend --no-edit${C_NC}?
+    if [ -z "$(git rev-parse --git-dir)" ]; then
+        echo "${C_RED} Not in a git directory.${C_NC}"
+        return 0
+    fi
 
-─────── Last commit ───────────────────
-$(gitlog -1)
-─────── Staged files ──────────────────
-${C_BLUE}$(gitstatus_staged)${C_NC}
-───────────────────────────────────────"
-    confirm_and_run "$message" git commit --amend --no-edit
+    if [ -z "$(git diff --cached --name-only)" ]; then
+        local git_stage=""
+        echo " Add files to ${C_CYAN}git stage${C_NC} before running ammend.${C_NC}"
+        return 0
+    fi
+
+    local C_1=$C_CYAN
+    local C_2=$C_YEllOW
+    local msg
+    msg+="╭─────── ${C_1} Last commit${C_NC} ──────────────────────────╮"$'\n'
+    msg+="$(gitlog -1)"$'\n'
+    msg+="├─────── ${C_2} Files to add to ${C_NC} ─────────────────────────┤"$'\n'
+    msg+="${C_BLUE}$(gitstatus_staged)${C_NC}"$'\n'
+    msg+="╰────────────────────────────────────────────────╯"$'\n'
+    msg+="${ICON_RIGHT} Run:  ${C_BOLD}${C_CYAN}git commit --amend --no-edit${C_NC}?"
+
+    confirm_and_run "$msg" git commit --amend --no-edit
 }
 
 function gitpush_origin() {
+    if [ -z "$(git rev-parse --git-dir)" ]; then
+        echo "${C_RED} Not in a git directory.${C_NC}"
+        return 0
+    fi
+
+    if ! git remote get-url origin >/dev/null 2>&1; then
+        echo -e "${C_RED} No remote origin configured.${C_NC}"
+        echo "To configure remote origin, run:"
+        echo "  ${C_BOLD}git remote add origin <repository-url>${C_NC}"
+        return 0
+    fi
+
     local current_branch=$(git branch --show-current)
+    local staged_files=$(git diff --cached --name-status)
+    local user_name=$(git config --global user.name)
+    local user_email=$(git config --global user.email)
     local commits_ahead=$(git rev-list --count HEAD...origin/$current_branch)
     if [[ "$commits_ahead" -eq 0 ]]; then
-        echo "Nothing to push. All commits are already pushed to origin."
-        echo "─────── Last commit ───────────────────"
-        echo "$(gitlog -1)"
+        echo "${C_YELLOW} Nothing to push. All commits are already pushed to origin.${C_NC}"
+        echo "──────── Last 3 commits ─────────────────────────────"
+        echo "$(gitlog -3)"
         return 0
     fi
 
     local C_1=$C_CYAN
     local C_2=$C_YELLOW
-    local message="${ICON_RIGHT}Run:  ${C_BOLD}${C_CYAN}git push origin $current_branch${C_NC}?
+    local msg
+    msg+="╭─────── ${C_1}Git${C_NC} ────────────────────────────────────╮"$'\n'
+    msg+=$(pprint "• User name:  ${C_BOLD}${user_name}${C_NC}")$'\n'
+    msg+=$(pprint "• User email: ${C_BOLD}${user_email}${C_NC}")$'\n'
+    msg+="├─────── ${C_1} Branch${C_NC} ───────────────────────────────┤"$'\n'
+    msg+=$(pprint "• ${C_BOLD}${C_CYAN}${current_branch}${C_NC}")$'\n'
+    msg+="├─────── ${C_2}󰕒 Commits to push!${C_NC} ─────────────────────┤"$'\n'
+    msg+="$(gitunpushed_commits)"$'\n'
+    if [ -n "${staged_files}" ]; then
+        msg+="├─────── ${C_BOLD}${C_RED}⚠ Staged files (forgot to commit?)${C_NC} ─────┤"$'\n'
+        msg+="$(gitstatus_staged)"$'\n'
+    fi
+    msg+="╰────────────────────────────────────────────────╯"$'\n'
+    msg+="${ICON_RIGHT} Run:  ${C_BOLD}${C_CYAN}git push origin $current_branch${C_NC}?"
 
-╭─────── ${C_1}Git${C_NC} ───────────────────────────────╮
-│• User name:  ${C_BOLD}$(git config --global user.name)${C_NC}
-│• User email: ${C_BOLD}$(git config --global user.email)${C_NC}
-├─────── ${C_1}Branch${C_NC} ────────────────────────────┤
-│• ${C_BOLD}${C_CYAN}${current_branch}${C_NC}
-├─────── ${C_2}Staged files (forgot to commit?)${C_NC} ──┤
-│$(gitstatus_staged)
-├─────── ${C_2}Commits to push!${C_NC} ──────────────────┤
-$(gitunpushed_commits)
-╰───────────────────────────────────────────╯"
-
-    confirm_and_run "$message" git push origin "$current_branch"
+    confirm_and_run "$msg" git push origin "$current_branch"
 }

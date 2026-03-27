@@ -12,7 +12,10 @@ confirm_and_run() {
     fi
     shift
 
-    read -r -p "${prompt_message} [y/yes/s/sim]: " reply
+    local msg
+    msg+="${prompt_message}"$'\n'
+    msg+="Confirm [y/yes/s/sim]: "
+    read -r -p "$msg" reply
     reply="${reply,,}" # lowercase
     if [[ "$reply" =~ ^(y|yes|s|sim)$ ]]; then
         "$@"
