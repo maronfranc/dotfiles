@@ -7,3 +7,5 @@ function fe() {
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
+
+alias fe_media="fe /run/media/$USER"
