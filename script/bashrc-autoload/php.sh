@@ -28,16 +28,27 @@ createlaravel_project() {
 alias composer_install="composer install --no-dev --prefer-dist"
 
 phpart() {
-  local dir="$PWD"
+    local dir="$PWD"
 
-  while [[ "$dir" != "/" ]]; do
-    if [[ -f "$dir/artisan" ]]; then
-      php "$dir/artisan" "$@"
-      return
-    fi
-    dir="$(dirname "$dir")"
-  done
+    while [[ "$dir" != "/" ]]; do
+        if [[ -f "$dir/artisan" ]]; then
+            php "$dir/artisan" "$@"
+            return
+        fi
+        dir="$(dirname "$dir")"
+    done
 
-  echo "artisan: not inside a Laravel project"
-  return 1
+    echo "artisan: not inside a Laravel project"
+    return 1
+}
+
+laravelcacheclear() {
+    php artisan config:clear
+    php artisan route:clear
+    php artisan config:cache
+    php artisan route:cache
+
+    php artisan cache:clear
+
+    composer dump-autoload
 }

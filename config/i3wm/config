@@ -127,6 +127,8 @@ for_window [class="^steam_app_.*"] move to workspace $ws3
 ########################################################################
 ########################################################################
 floating_modifier $mod
+# Disable `Ctrl+Enter` default key to fullscreen.
+bindsym Control+Return nop
 # bindsym $mod+l exec "sleep 0.1 && i3lock --blur 5"
 bindsym $mod+Return exec $term
 bindsym $mod+KP_Enter exec $term

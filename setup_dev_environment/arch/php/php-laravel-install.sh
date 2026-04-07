@@ -8,6 +8,7 @@ echo "==> Installing PHP + required extensions"
 sudo pacman -S --noconfirm \
     php \
     php-fpm \
+    php-pgsql \
     composer
 
 echo "==> Backing up php.ini"
@@ -42,3 +43,29 @@ echo "==> Enabling PHP-FPM (not started yet)"
 sudo systemctl enable php-fpm.service
 
 echo "✅ Hardened PHP + Laravel install complete"
+echo "• Enable extensions by editing: \"/etc/php/php.ini\""
+echo "  ◦ postgresql:       \"extension=pgsql\" and \"extension=pdo_pgsql\""
+echo "  ◦ MySQL/MariaDB:    \"extension=mysqli\" and \"extension=pdo_mysql\""
+echo "  ◦ SQLite:           \"extension=sqlite3\" and \"extension=pdo_sqlite\""
+echo "  ◦ MongoDB:          \"extension=mongodb\""
+echo "  ◦ Redis:            \"extension=redis\""
+echo "  ◦ Memcached:        \"extension=memcached\""
+echo "  ◦ LDAP:             \"extension=ldap\""
+echo "  ◦ IMAP:             \"extension=imap\""
+echo "  ◦ GD library:       \"extension=gd\""
+echo "  ◦ XML/HTML parsing: \"extension=xml\" and \"extension=dom\""
+echo "  ◦ JSON:             \"extension=json\""
+echo "  ◦ OPCache:          \"extension=opcache\""
+echo "  ◦ ZIP archive:      \"extension=zip\""
+echo "  ◦ SOAP:             \"extension=soap\""
+echo "  ◦ BCMath:           \"extension=bcmath\""
+echo "  ◦ PCRE:             \"extension=pcre\""
+echo "  ◦ OpenSSL:          \"extension=openssl\""
+echo "  ◦ gettext:          \"extension=gettext\""
+echo "  ◦ mbstring:         \"extension=mbstring\""
+echo "  ◦ fileinfo:         \"extension=fileinfo\""
+echo "  ◦ intl:             \"extension=intl\""
+echo "  ◦ exif:             \"extension=exif\""
+echo "  ◦ calendar:         \"extension=calendar\""
+echo "  ◦ PDO:              \"extension=pdo\""
+echo "  ◦ session:          \"extension=session\""

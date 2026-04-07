@@ -4,7 +4,7 @@ set -e          # Stop on first error
 set -u          # Disallow unset variables
 set -o pipefail # Propagate pipeline failures
 
-FILE="config.yml"
+FILE="config.yaml"
 TARGET_CONFIG="$HOME/.config/posting/$FILE"
 SRC_CONFIG="$PWD/$FILE"
 
