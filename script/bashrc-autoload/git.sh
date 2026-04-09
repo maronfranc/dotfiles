@@ -96,7 +96,7 @@ function gitcommit_amend() {
     local msg
     msg+="╭─────── ${C_1} Last commit${C_NC} ──────────────────────────╮"$'\n'
     msg+="$(gitlog -1)"$'\n'
-    msg+="├─────── ${C_2} Files to add to ${C_NC} ─────────────────────────┤"$'\n'
+    msg+="├─────── ${C_2} Files to add to ${C_NC} ─────────────────────┤"$'\n'
     msg+="${C_BLUE}$(gitstatus_staged)${C_NC}"$'\n'
     msg+="╰────────────────────────────────────────────────╯"$'\n'
     msg+="${ICON_RIGHT} Run:  ${C_BOLD}${C_CYAN}git commit --amend --no-edit${C_NC}?"

@@ -15,6 +15,7 @@ rm -rf "$HOME/.config/composer" "$HOME/.composer"
 echo "==> Removing PHP packages"
 sudo pacman -Rns --noconfirm \
     php php-fpm php-curl php-mbstring php-zip php-xml \
+    php-pgsql \
     php-gd php-intl php-bcmath composer || true
 
 echo "==> Removing PHP directories"

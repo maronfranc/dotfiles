@@ -16,7 +16,7 @@ fi
 stop_msg="🛑 Stop all containers"
 containers="$stop_msg"$'\n'"$containers"
 # Add numbered prefixes to each container line
-numbered_containers=$(echo "$containers" | awk '{print NR ") " $0}')
+numbered_containers=$(echo "$containers" | awk '{print NR "c) " $0}')
 
 # Create rofi menu with formatted container list
 selected=$(echo "$numbered_containers" |
@@ -35,7 +35,7 @@ if [[ ! "$selected" =~ [a-zA-Z] ]]; then
     exit 0
 fi
 
-# Extract container name from selection (everything before the first space)
+# Extract container name from selection (everything before the first space).
 container_names=$(echo "$selected" | cut -d'|' -f1 | xargs)
 
 IFS=' ' read -ra container_array <<<"$container_names"

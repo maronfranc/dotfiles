@@ -2,11 +2,11 @@
 msg_title="󰡨 Docker start"
 
 # Get list of stopped containers and format them for rofi menu.
-containers=$(docker ps -a \
-    --format "table {{.Names}} | {{.Status}} | {{.Ports}}" |
-    tail -n +2 |
-    grep -i "exited\|stopped" |
-    sort -r)
+containers=$(docker ps -aq --filter "status=exited" | \
+xargs -I {} docker inspect --format '{{.State.FinishedAt}}   {{.Name}}' {} | \
+sed -E 's/T/ /; s/\..*Z//' | \
+sed -E 's/ \///' | \
+sort -t '|' -k1,1r)
 
 if [ -z "$containers" ]; then
     notify-send "$msg_title" "No stopped containers found"
@@ -19,14 +19,14 @@ numbered_containers=$(echo "$containers" | awk '{print NR "c) " $0}')
 # Create rofi menu with formatted container list.
 selected=$(echo "$numbered_containers" |
     rofi -dmenu -multi-select -p "Start container" |
-    awk '{printf "%s | %s\n", $2, $3}')
+    awk '{printf "%s\n", $5}')
 
 # Check if user selected a container.
 if [[ ! "$selected" =~ [a-zA-Z] ]]; then
     exit 0
 fi
 
-# Extract container name from selection (everything before the first space).
+# Format container names to be in a single line and with space separated names.
 container_names=$(echo "$selected" | cut -d'|' -f1 | xargs)
 
 # Start the selected containers.

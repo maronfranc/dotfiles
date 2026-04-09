@@ -1,5 +1,4 @@
 # --- Environment ---
-# TODO: 
 env = TERM=xterm-256color
 env = WINIT_X11_SCALE_FACTOR=1
 
@@ -9,6 +8,7 @@ window-decoration = false
 background-opacity = 0.5
 window-padding-x = 0
 window-padding-y = 0
+confirm-close-surface = false
 
 # --- Scrolling ---
 scrollback-limit = 10000

@@ -4,9 +4,9 @@
 # 1. Run script name:   `script-name`.
 # 2. Run with 1 param:  `script-name create`
 # 3. Run with 2 params: `script-name create project-name`
-#
 set -e          # Stop on first error
 set -o pipefail # Propagate pipeline failures
+echo -ne "\033]0;🌐 Posting \007" # Script title.
 
 C_CYAN="\033[0;36m"
 C_RED=$'\033[31m'
