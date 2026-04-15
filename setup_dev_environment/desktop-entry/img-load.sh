@@ -23,3 +23,4 @@ xdg-mime default "$FILE" image/gif
 xdg-mime default "$FILE" image/bmp
 xdg-mime default "$FILE" image/tiff
 xdg-mime default "$FILE" image/avif
+xdg-mime default "$FILE" image/svg
