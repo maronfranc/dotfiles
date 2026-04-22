@@ -17,7 +17,8 @@ scrollback-limit = 10000
 foreground = #D8DEE9
 background = #2E3440
 
-palette = 0=#3B4252
+# palette = 0=#00FF00
+palette = 0=#4C566A
 palette = 1=#BF616A
 palette = 2=#A3BE8C
 palette = 3=#EBCB8B
@@ -26,7 +27,8 @@ palette = 5=#B48EAD
 palette = 6=#88C0D0
 palette = 7=#E5E9F0
 
-palette = 8=#4C566A
+# palette = 8=#00FF00
+palette = 8=#505D6B
 palette = 9=#BF616A
 palette = 10=#A3BE8C
 palette = 11=#EBCB8B
@@ -34,6 +36,7 @@ palette = 12=#81A1C1
 palette = 13=#B48EAD
 palette = 14=#8FBCBB
 palette = 15=#ECEFF4
+
 
 bold-is-bright = true
 
