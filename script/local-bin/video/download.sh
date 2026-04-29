@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Script to download video with yt-dlp and docker image.
 # SEE: https://hub.docker.com/search?q=yt-dlp
-echo -ne "\033]0; yt-dlp download video \007" # Script title.
+echo -ne "\033]0; yt-dlp download video\007" # Script title.
 
 # ===== ===== Style ===== ===== #
 C_BOLD=$'\033[1m'
@@ -18,8 +18,8 @@ if [[ -z "$video_url" ]]; then
     exit 1
 fi
 
-read -p "• Enter start time ${C_BOLD}${C_CYAN}(e.g. 10:30)${C_NC} or press Enter to skip: " start_time
-read -p "• Enter end time ${C_BOLD}${C_CYAN}(e.g. 15:45)${C_NC} or press Enter to skip: " end_time
+read -p "• Enter start time ${C_BOLD}${C_CYAN}(e.g. 01:30)${C_NC} or press Enter to skip: " start_time
+read -p "• Enter end time   ${C_BOLD}${C_CYAN}(e.g. 15:45)${C_NC} or press Enter to skip: " end_time
 
 validate_time() {
     local time_input="$1"
