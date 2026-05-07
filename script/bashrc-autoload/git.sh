@@ -148,3 +148,29 @@ function gitpush_origin() {
 
     confirm_and_run "$msg" git push origin "$current_branch"
 }
+
+function gitprint_nested_unpushed() {
+    local root_dir="${1:-.}"
+
+    find "$root_dir" -type d -name ".git" | while read -r gitdir; do
+        local repo_dir="$(dirname "$gitdir")"
+
+        (
+            cd "$repo_dir"
+            # Skip repos without upstream.
+            if ! git rev-parse --abbrev-ref --symbolic-full-name '@{u}' \
+                >/dev/null 2>&1; then
+                echo -e "🟥 No upstream: ${C_BOLD}${C_RED}${repo_dir}${C_NC}"
+                exit 0
+            fi
+
+            unpushed_count="$(git rev-list --count @{u}..HEAD)"
+            if [[ "$unpushed_count" -gt 0 ]]; then
+                echo -e "╭─────── ${C_YELLOW}⚠ ${unpushed_count} Unpushed logs list${C_NC} ─────────────────╮"
+                pprint  " ${C_BOLD}${C_BLUE}${repo_dir}${C_NC}"
+                gitlog @{u}..HEAD
+                echo -e "╰────────────────────────────────────────────────╯"
+            fi
+        )
+    done
+}

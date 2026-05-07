@@ -27,6 +27,11 @@ createlaravel_project() {
 
 alias composer_install="composer install --no-dev --prefer-dist"
 
+phpartisan_list_routes() {
+    echo "Running: php artisan route:list"
+    php artisan route:list
+}
+
 phpart() {
     local dir="$PWD"
 

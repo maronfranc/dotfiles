@@ -7,4 +7,5 @@ function docker_ip() {
 }
 
 alias docker-compose="docker compose"
+alias docker-compose-reup="docker compose down && docker-compose up -d"
 # alias kubectl="minikube kubectl -- "

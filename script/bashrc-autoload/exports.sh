@@ -5,7 +5,7 @@ export HISTIGNORE="history*\
 :clear:exit\
 :node:python\
 :htop\
-:nvim*:tmux*:fe:v*\
+:nvim*:tmux*:fe:v *\
 "
 export HISTCONTROL=ignoredups
 
