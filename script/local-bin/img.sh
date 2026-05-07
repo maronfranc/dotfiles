@@ -39,9 +39,10 @@ open_img_and_dir() {
     fi
 
     # Order $selected_image first then all other images in directory.
-    ordered_imgs=($selected_image "${ordered_imgs[@]}")
+    ordered_imgs=("${selected_image[@]}" "${ordered_imgs[@]}")
     exec imv "${ordered_imgs[@]}"
 }
+
 
 open_dir_imgs() {
     valid_images=(*.jpg *.jpeg *.png *.webp *.gif *.bmp *.tiff *.tif *.avif *.svg)

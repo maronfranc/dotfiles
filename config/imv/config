@@ -35,6 +35,7 @@ overlay = true
 # Space Pause/play animations
 # t Start slideshow/increase delay by 1 second
 # T Stop slideshow/decrease delay by 1 second
+
 [binds]
 n = next
 b = prev
