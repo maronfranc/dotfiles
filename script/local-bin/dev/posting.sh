@@ -13,8 +13,9 @@ C_RED=$'\033[31m'
 C_YELLOW=$'\033[33m'
 C_NC="\033[0m" # Color reset
 
-POSTING_HOME="$HOME/999_posting_collections"
-commands=("help" "path" "create" "list" "open" "delete")
+POSTING_HOME="${HOME}/999_posting_collections"
+ENV_PATH="${POSTING_HOME}/.env"
+commands=("help" "create" "open" "delete" "edit_env")
 
 if ! command -v fzf >/dev/null 2>&1; then
     echo -e "Please install ${C_CYAN}fzf${C_NC} and try again."
@@ -37,16 +38,20 @@ select_items() {
 }
 
 show_help() {
-    echo "Available commands:"
-    echo -e "  • ${C_CYAN}help${C_NC}   - Show this help message."
-    echo -e "  • ${C_CYAN}create${C_NC} - Create posting directory."
-    echo -e "  • ${C_CYAN}list${C_NC}   - List all posting directory."
-    echo -e "  • ${C_CYAN}open${C_NC}   - Open a posting directory."
-    echo -e "  • ${C_CYAN}delete${C_NC} - Delete posting directory."
-}
-
-show_path() {
-    echo -e ${C_CYAN}$POSTING_HOME${C_NC}
+    echo -e "File paths:"
+    echo -e "  • Collections:   ${C_YELLOW}${POSTING_HOME}${C_NC}"
+    echo -e "  • Env variables: ${C_YELLOW}${ENV_PATH}${C_NC}"
+    echo -e "Available commands:"
+    echo -e "  • ${C_CYAN}help${C_NC}     - Show this help message."
+    echo -e "  • ${C_CYAN}create${C_NC}   - Create posting directory."
+    echo -e "  • ${C_CYAN}open${C_NC}     - Open a posting directory."
+    echo -e "  • ${C_CYAN}delete${C_NC}   - Delete posting directory."
+    echo -e "  • ${C_CYAN}edit_env${C_NC} - Nvim edit file in ${ENV_PATH}."
+    # echo -e "  • ${C_CYAN}collection_list${C_NC} - List all posting directory."
+    echo -e "Collection lists:"
+    for f in "${POSTING_HOME}"/*; do
+        echo -e "  • ${C_YELLOW}$(basename $f).${C_NC}"
+    done
 }
 
 create_cmd() {
@@ -58,14 +63,6 @@ create_cmd() {
 
     mkdir -p "$POSTING_HOME/$dir_name"
     echo -e "Posting path $C_CYAN'$POSTING_HOME/$dir_name'$C_NC created."
-}
-
-list_cmd() {
-    echo -e "PATH: $C_YELLOW$POSTING_HOME$C_NC"
-    for f in "$POSTING_HOME"/*; do
-        # printf "    %b• %s%b\n" "$C_CYAN" "$(basename "$f")" "$C_NC"
-        echo -e "    $C_CYAN• $(basename $f)$C_NC"
-    done
 }
 
 open_cmd() {
@@ -84,7 +81,7 @@ open_cmd() {
     fi
 
     if [ -d "$POSTING_HOME/$dir_path" ]; then
-        posting -c "$POSTING_HOME/$dir_path"
+        posting --env "$ENV_PATH" -c "$POSTING_HOME/$dir_path"
     else
         echo "Posting '$POSTING_HOME/$dir_path' not found."
     fi
@@ -125,16 +122,25 @@ pick_command() {
 
     run_command "$selected"
 }
+
+edit_cmd() {
+    if command -v nvim >/dev/null 2>&1; then
+        nvim "$ENV_PATH" && pick_command
+    else
+        echo -e "Please install ${C_CYAN}neovim${C_NC} and try again."
+        exit 1
+    fi
+}
+
 run_command() {
     case "$1" in
-        help)   show_help     ;;
-        path)   show_path     ;;
-        list)   list_cmd      ;;
-        create) create_cmd $2 ;;
-        open)   open_cmd   $2 ;;
-        delete) delete_cmd $2 ;;
+        help)     show_help     ;;
+        create)   create_cmd $2 ;;
+        open)     open_cmd   $2 ;;
+        delete)   delete_cmd $2 ;;
+        edit_env) edit_cmd      ;;
         *) 
-            printf "⚠️ Unknown command $C_YELLOW\"$1\"$C_NC. " 
+            echo -e "⚠️ Unknown command ${C_YELLOW}\"$1\"${C_NC}." 
             show_help
         ;;
     esac
