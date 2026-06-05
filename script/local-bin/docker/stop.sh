@@ -1,24 +1,36 @@
 #!/usr/bin/env bash
 msg_title="󰡨 Docker stop"
 
-# Get list of running containers and format them for rofi menu
-containers=$(docker ps \
-    --format "table {{.Names}} | {{.Status}} | {{.Ports}}" |
-    tail -n +2)
+# Get list of running containers and format them for rofi menu.
+containers=$(
+    docker ps \
+        --format "table {{.Names}} | {{.Status}} | {{.Ports}}" |
+        tail -n +2 | \
+    while read -r container_line; do
+        container_name=$(echo "$container_line" | cut -d'|' -f1 | xargs)
+        ip=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container_name" 2>/dev/null)
+        if [ -z "$ip" ]; then
+            ip="N/A"
+        fi
+        # Extract status and ports, then replace ports with IP.
+        status=$(echo "$container_line" | cut -d'|' -f2 | xargs)
+        echo "$ip | $container_name | $status"
+    done
+)
 
-# Check if there are any containers
+# Check if there are any containers.
 if [ -z "$containers" ]; then
     notify-send "$msg_title" "No running containers found"
     exit 1
 fi
 
-# Add stop option at the start
+# Add stop option at the start.
 stop_msg="🛑 Stop all containers"
 containers="$stop_msg"$'\n'"$containers"
-# Add numbered prefixes to each container line
+# Add numbered prefixes to each container line.
 numbered_containers=$(echo "$containers" | awk '{print NR "c) " $0}')
 
-# Create rofi menu with formatted container list
+# Create rofi menu with formatted container list.
 selected=$(echo "$numbered_containers" |
     rofi -dmenu -multi-select -p "Stop container")
 
@@ -29,7 +41,7 @@ if [[ "$selected" == *"$stop_msg"* ]]; then
     exit 0
 fi
 
-selected=$(echo "$selected" | awk '{printf "%s | %s\n", $2, $3}')
+selected=$(echo "$selected" | awk '{printf "%s | %s\n", $4, $5}')
 # Check if user didn't selected a container.
 if [[ ! "$selected" =~ [a-zA-Z] ]]; then
     exit 0
