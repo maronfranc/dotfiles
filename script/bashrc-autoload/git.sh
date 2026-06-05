@@ -174,3 +174,5 @@ function gitprint_nested_unpushed() {
         )
     done
 }
+
+alias gitstash_all="git stash --include-untracked"

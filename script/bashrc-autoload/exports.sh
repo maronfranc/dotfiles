@@ -23,3 +23,5 @@ if [[ -z "$SOURCE_DIR" ]]; then echo "SOURCE_DIR var is empty"; fi
 alias nvimeditor_config="cd $DOTFILE_DIR/../neovim-config/ && nvim"
 alias nvimdotfile_config="cd $DOTFILE_DIR && nvim"
 alias v="nvim"
+
+alias nvimlogs="nvim /home/main/.local/state/nvim/lsp.log"

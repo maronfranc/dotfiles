@@ -93,7 +93,8 @@ mkdir -p "$download_dir"
 
 # Saved file name: `[$channel]*$10:01-$12:01 youtube.com__watch__v=$video_id- $title.mp4`.
 # SEE: [trim-filenames](#https://github.com/yt-dlp/yt-dlp/issues/3494#issuecomment-2532759099).
-# `restrict-filenames` - Restrict filenames to only ASCII characters, avoid "&" and spaces in filenames.
+# `--restrict-filenames` - Restrict filenames to only ASCII characters, avoid "&" and spaces in filenames.
+# `--embed-subs` - Download and embed video subtitles(CC).
 docker run --rm -v "$download_dir":/Downloads \
     jauderho/yt-dlp:latest \
     --restrict-filenames \
