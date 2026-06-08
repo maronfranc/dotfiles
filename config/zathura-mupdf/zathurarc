@@ -15,6 +15,12 @@ map 0 zoom original
 map f copy_link # Copy link instead of follow link.
 map F follow    # Open link.
 
+# ===== ===== Increase system font size===== ===== #
+set font "monospace bold 16"
+set highlight-fg "#880000" # Link number color.
+# set highlight-color "#ffff00" # Link number bgcolor.
+# set highlight-transparency "0.25"
+
 # ===== ===== Theme ===== ===== #
 set default-bg "#000000"
 set default-fg "#CDD6F4"
