@@ -23,6 +23,10 @@ select_options() {
         --bind="j:down,k:up,h:abort,l:accept"
 }
 
+# Define operation options with full messages
+REMOVE_SOUND_OPTION="🔇 Remove video sound."
+EXTRACT_AUDIO_OPTION="🎵 Extract video audio."
+
 # Get video files with their sizes for selection.
 input_file=$(find . -maxdepth 1 -type f \( \
     -name "*.mp4" -o -name "*.mkv" -o -name "*.avi" -o \
@@ -41,13 +45,13 @@ fi
 # ===== ===== Operation selection ===== ===== #
 # Get operation type
 operation=$(select_options "Select operation:" <<EOF
-🔇 Remove video sound.
-🎵 Extract video audio.
+$REMOVE_SOUND_OPTION
+$EXTRACT_AUDIO_OPTION
 EOF
 )
 
 # ===== ===== Remove video sound ===== ===== #
-if [[ "$operation" == "Remove video sound" ]]; then
+if [[ "$operation" == "$REMOVE_SOUND_OPTION" ]]; then
     echo "Selected: $input_file"
 
     # ===== ===== Format ===== ===== #
@@ -73,7 +77,7 @@ if [[ "$operation" == "Remove video sound" ]]; then
 fi
 
 # ===== ===== Audio extraction ===== ===== #
-if [[ "$operation" == "Audio extraction" ]]; then
+if [[ "$operation" == "$EXTRACT_AUDIO_OPTION" ]]; then
     echo "Selected: $input_file"
 
     # ===== ===== Audio extraction ===== ===== #
