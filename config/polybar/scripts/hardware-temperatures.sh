@@ -31,7 +31,7 @@ color_temp() {
 cpu_hex=$(color_temp "$cpu_float")
 gpu_hex=$(color_temp "$gpu_float")
 mb_hex=$(color_temp "$mb_float")
-on_click_command="alacritty -t htop -e htop"
+on_click_command="ghostty -e btop"
 
 echo "\
 %{A1:i3-msg 'exec --no-startup-id $on_click_command':}\
