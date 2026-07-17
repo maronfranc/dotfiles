@@ -1,21 +1,11 @@
 export PATH="$HOME/.local/bin:$PATH"
 
-export HISTIGNORE="history*\
-:ls*:cd*:echo*:cat*\
-:clear:exit\
-:node:python\
-:htop\
-:nvim*:tmux*:fe:v *\
-"
-export HISTCONTROL=ignoredups
-
 # Open `man` with neovim
 # SEE: https://www.reddit.com/r/neovim/comments/g7ymvv/do_you_use_neovim_for_reading_your_man_pages/
 # export MANPAGER='nvim +Man!' export MANWIDTH=999
 export TERMINAL="ghostty"
 export EDITOR="nvim"
 export VISUAL="nvim"
-
 
 if [[ -z "$DOTFILE_DIR" ]]; then echo "DOTFILE_DIR var is empty"; fi
 if [[ -z "$SOURCE_DIR" ]]; then echo "SOURCE_DIR var is empty"; fi
@@ -25,3 +15,13 @@ alias nvimdotfile_config="cd $DOTFILE_DIR && nvim"
 alias v="nvim"
 
 alias nvimlogs="nvim /home/main/.local/state/nvim/lsp.log"
+
+export HISTIGNORE="${HISTIGNORE:+$HISTIGNORE:}\
+history*\
+:ls*:cd*:echo*:cat*\
+:clear:exit\
+:node:python\
+:htop:btop\
+:v *\
+:nvim*:tmux**\
+"

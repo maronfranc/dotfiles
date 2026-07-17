@@ -23,6 +23,10 @@ fi
 rm -rf "$TARGET"
 ln -s "$SRC" "$TARGET"
 
+# Add execute permission to scripts.
+for file in ./script/*.sh; do
+    [ -f "$file" ] && chmod +x "$file"
+done
 
 # Create the symlink
 ln -s "$SOURCE_DIR" "$TARGET_DIR"

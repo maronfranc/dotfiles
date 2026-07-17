@@ -8,6 +8,7 @@ alias javabuild_refresh="./gradlew build -x test --refresh-dependencies"
 alias javabuild_dependencies="./gradlew dependencies"
 alias javainstaled_dependencies="./gradlew dependencies --configuration compileClasspath"
 alias javarun="./gradlew bootRun"
+
 javarun_dev() {
     echo "Building and running with hot-reload."
 
@@ -73,7 +74,6 @@ javaspringboot_create() {
     rm -rf "$zip_file"
     cd "$artifact_name"
 }
-
 
 micronaut_create() {
     local C_1="$C_CYAN"

@@ -9,3 +9,5 @@ function fe() {
 }
 
 alias fe_media="fe /run/media/$USER"
+
+export HISTIGNORE="${HISTIGNORE:+$HISTIGNORE:}fe:fe_media:v"

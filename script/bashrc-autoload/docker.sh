@@ -7,7 +7,13 @@ function docker_ip() {
   docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name
 }
 
-alias dockercompose="docker compose"
 alias dockercompose-reup="docker compose down --volumes && docker-compose up -d"
 
-# alias kubectl="minikube kubectl -- "
+export HISTIGNORE="${HISTIGNORE:+$HISTIGNORE:}\
+docker compose up -d\
+:docker compose down\
+:dockercompose-reup\
+:docker system prune\
+:docker_ip\
+:lazydocker*\
+"

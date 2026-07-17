@@ -9,6 +9,11 @@ DELETE_TARGET="$HOME/.config/polybar"
 TARGET="$HOME/.config"
 SOURCE="$(pwd)"
 
+chmod +x ./launch.sh
+for file in ./script/*.sh; do
+    [ -f "$file" ] && chmod +x "$file"
+done
+
 confirm_and_run "Confirm delete: $DELETE_TARGET" \
     rm -rf $DELETE_TARGET 
 

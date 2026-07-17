@@ -17,3 +17,10 @@ testcamera0here() {
     ffmpeg -f v4l2 -i /dev/video0 ${duration:+-t $duration} "$@" \
     "recording_$(date +%Y-%m-%d_%H-%M-%S).mp4"
 }
+
+alias nvidiaprint="nvidia-smi --query-gpu=gpu_name,temperature.gpu,utilization.gpu,memory.used --format=csv,noheader"
+
+export HISTIGNORE="${HISTIGNORE:+$HISTIGNORE:}\
+nvidia-smi\
+:nvidiaprint\
+"

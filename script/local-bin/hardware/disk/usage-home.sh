@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-du -h --max-depth=1 ~ | sort -hr
+du -h --max-depth=1 $HOME | sort -hr
