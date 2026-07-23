@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-set -e # Stop on first error
+set -e
 
+# ── Helpers ───────────────────────────────────────────────────────────
 select_options() {
     local prompt=$1
 
@@ -11,7 +12,8 @@ select_options() {
         --bind="j:down,k:up,h:abort,l:accept"
 }
 
-# Set container name and action from arguments
+
+# ── Resolve container ────────────────────────────────────────────────
 CONTAINER_NAME="$1"
 ACTION="$2"
 
@@ -33,6 +35,7 @@ if ! docker ps --format "{{.Names}}" | grep -q "^$CONTAINER_NAME$"; then
     exit 1
 fi
 
+# ── Resolve network & IP ─────────────────────────────────────────────
 CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_NAME" 2>/dev/null)
 
 if [[ -z "$CONTAINER_IP" ]]; then

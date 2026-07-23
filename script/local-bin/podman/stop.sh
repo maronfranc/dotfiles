@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-msg_title="󰡨 Docker stop"
+msg_title=" Podman stop"
 
-# TODO: in some cases it shows `invalid IP`, specially when the IP is the host IP.
-# Get list of running containers and format them for rofi menu.
 containers=$(
-    docker ps \
+    podman ps \
         --format "table {{.Names}} | {{.Status}} | {{.Ports}}" |
         tail -n +2 | \
     while read -r container_line; do
         container_name=$(echo "$container_line" | cut -d'|' -f1 | xargs)
-        ip=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container_name" 2>/dev/null)
+        ip=$(podman inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container_name" 2>/dev/null)
         if [ -z "$ip" ]; then
             ip="N/A"
         fi
@@ -25,7 +23,7 @@ if [ -z "$containers" ]; then
     exit 1
 fi
 
-# Add stop option at the start.
+# Add stop all option at the start.
 stop_msg="🛑 Stop all containers"
 containers="$stop_msg"$'\n'"$containers"
 # Add numbered prefixes to each container line.
@@ -38,7 +36,7 @@ selected=$(echo "$numbered_containers" |
 # Check if stop all is selected.
 if [[ "$selected" == *"$stop_msg"* ]]; then
     # TryRun my custom "stop all script" else run the simple command.
-    docker-stop-all-containers || docker stop $(docker ps -q)
+    podman-stop-all-containers || podman stop $(podman ps -q)
     exit 0
 fi
 
@@ -54,7 +52,7 @@ container_names=$(echo "$selected" | cut -d'|' -f1 | xargs)
 IFS=' ' read -ra container_array <<<"$container_names"
 for container_name in "${container_array[@]}"; do
     # Stop the selected container
-    if docker stop "$container_name" >/dev/null 2>&1; then
+    if podman stop "$container_name" >/dev/null 2>&1; then
         notify-send -u low "$msg_title" \
             "Container '$container_name' stopped successfully."
     else
