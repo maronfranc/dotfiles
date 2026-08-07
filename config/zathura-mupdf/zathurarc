@@ -7,7 +7,7 @@ set selection-clipboard clipboard
 # ===== ===== Key map ===== ===== #
 map <C-i> recolor # Toggle night mode
 map n navigate next
-map p navigate previous
+map b navigate previous
 map + zoom in
 map - zoom out
 map = zoom in

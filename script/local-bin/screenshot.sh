@@ -23,7 +23,7 @@ save_window() {
 }
 
 save_selection() {
-    notify-send "Screenshot save" "Click a window to screenshot it."
+    notify-send "Screenshot save" "Click a window to screenshot it." -t 750
     scrot --file "$FILENAME" --select \
         --exec 'notify-send "Window screenshot saved" "$f"'
 }

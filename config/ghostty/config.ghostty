@@ -37,6 +37,11 @@ palette = 13=#B48EAD
 palette = 14=#8FBCBB
 palette = 15=#ECEFF4
 
+# --- Selection Colors (Dark Golden) ---
+# Background: Dark Golden Rod
+selection-background = #B8860B
+# Foreground: Dark Nord Grey for contrast
+selection-foreground = #2E3440
 
 bold-is-bright = true
 

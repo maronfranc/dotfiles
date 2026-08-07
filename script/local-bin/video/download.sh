@@ -10,6 +10,21 @@ C_GREEN=$'\033[32m'
 C_CYAN=$'\033[36m'
 C_NC=$'\033[0m' # Reset color | No color.
 
+# ===== ===== Container Runtime Detection ===== ===== #
+# Determine which container runtime to use (podman or docker).
+# Podman is preferred if installed, otherwise falls back to docker.
+if command -v podman >/dev/null 2>&1; then
+    CONTAINER_APP="podman"
+    CONTAINER_URL="docker.io/jauderho/yt-dlp:latest"
+elif command -v docker >/dev/null 2>&1; then
+    CONTAINER_APP="docker"
+    CONTAINER_URL="jauderho/yt-dlp:latest"
+else
+    echo -e "${C_RED}Error: Neither 'podman' nor 'docker' is installed.${C_NC}"
+    echo "Please install one of them to continue."
+    exit 1
+fi
+
 # ===== ===== Input ===== ===== #
 read -p "• Enter the YouTube video URL: " video_url
 
@@ -95,16 +110,18 @@ mkdir -p "$download_dir"
 # SEE: [trim-filenames](#https://github.com/yt-dlp/yt-dlp/issues/3494#issuecomment-2532759099).
 # `--restrict-filenames` - Restrict filenames to only ASCII characters, avoid "&" and spaces in filenames.
 # `--embed-subs` - Download and embed video subtitles(CC).
-docker run --rm -v "$download_dir":/Downloads \
-    jauderho/yt-dlp:latest \
+
+# Use the detected container runtime variable ($CONTAINER_APP)
+$CONTAINER_APP run --rm -v "$download_dir":/Downloads \
+    $CONTAINER_URL \
     --restrict-filenames \
     "${time_clip_args[@]}" \
     -o "/Downloads/[%(uploader)s]${formatted_video_url} - %(title).100B.%(ext)s" \
     "$video_url"
 
 if [ $? -eq 0 ]; then
-    echo "✅ ${C_GREEN}Download completed successfull.${C_NC}"
+    echo -e "✅ ${C_GREEN}Download completed successfully.${C_NC}"
 else
-    echo "🟥 ${C_RED}Download failed.${C_NC}"
+    echo -e "🟥 ${C_RED}Download failed.${C_NC}"
     exit 1
 fi

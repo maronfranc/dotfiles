@@ -13,8 +13,8 @@ for file_path in "$SOURCE_DIR"/*; do
     fi
 done
 
-if [ -d "$SOURCE_DIR/dont_commit" ]; then
-    for file_path in "$SOURCE_DIR"/dont_commit/*; do
+if [ -d "$SOURCE_DIR/ignore_this" ]; then
+    for file_path in "$SOURCE_DIR"/ignore_this/*; do
         if [ -f "$file_path" ]; then
             source "$file_path"
         fi

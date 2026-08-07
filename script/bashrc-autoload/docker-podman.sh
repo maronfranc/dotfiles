@@ -12,10 +12,10 @@ alias dockercompose-reup="docker compose down --volumes && docker-compose up -d"
 alias lazypodman="DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock lazydocker"
 
 export HISTIGNORE="${HISTIGNORE:+$HISTIGNORE:}\
-docker compose up -d\
-:docker compose down\
-:dockercompose-reup\
-:docker system prune\
-:docker_ip\
+docker compose up -d:podman compose up -d\
+:docker compose down:podman compose down\
+:docker system prune:podman system prune\
 :lazydocker:lazypodman\
+:docker_ip\
+:dockercompose-reup\
 "
