@@ -1,4 +1,5 @@
 export PATH="$HOME/.local/bin:$PATH"
+export LANG=C.utf8 # Set UTF-8 locale and fixed tmux icons.
 
 # Open `man` with neovim
 # SEE: https://www.reddit.com/r/neovim/comments/g7ymvv/do_you_use_neovim_for_reading_your_man_pages/

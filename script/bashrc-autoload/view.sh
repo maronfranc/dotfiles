@@ -47,14 +47,22 @@ pprint() {
 }
 
 set_git_branch_in_prompt() {
-    source /usr/share/git/completion/git-prompt.sh 2>/dev/null ||
-        source /etc/bash_completion.d/git-prompt 2>/dev/null
-    # local user_host='\u@\h'
-    local wpath='\w'
-    local git_psi='$(__git_ps1 "(%s)")'
-    export PS1="${C_YELLOW}${wpath}${C_BLUE}${git_psi}${C_NC}\$ "
+    if [[ -z ${__git_ps1+x} ]]; then
+        source /usr/share/git/completion/git-prompt.sh 2>/dev/null ||
+            source /etc/bash_completion.d/git-prompt 2>/dev/null ||
+            unset -f __git_ps1 2>/dev/null
+    fi
+    # Use single quotes so __git_ps1 runs at prompt-display time, not definition time.
+    if [[ -n ${__git_ps1+x} && "$(declare -f __git_ps1)" ]]; then
+        export PS1="${C_YELLOW}\\w${C_BLUE}$( __git_ps1 "(%s)" )${C_NC}\\$ "
+    else
+        export PS1="${C_YELLOW}\\w${C_NC}\\$ "
+    fi
 }
+
 set_git_branch_in_prompt
 unset -f set_git_branch_in_prompt
 
-fastfetch
+if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+fi
