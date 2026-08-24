@@ -9,5 +9,6 @@ function tmuxdev() {
         tmux new-session -s $target
         return
     fi
+    echo -ne "\033]0;  Tmux main session\007"
     tmux attach -t $target
 }

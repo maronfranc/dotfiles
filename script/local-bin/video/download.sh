@@ -33,8 +33,13 @@ if [[ -z "$video_url" ]]; then
     exit 1
 fi
 
-read -p "• Enter start time ${C_BOLD}${C_CYAN}(e.g. 01:30)${C_NC} or press Enter to skip: " start_time
-read -p "• Enter end time   ${C_BOLD}${C_CYAN}(e.g. 15:45)${C_NC} or press Enter to skip: " end_time
+# Prompt for additional options (time clip, quality, etc.).
+read -p "• Additional options (${C_BOLD}${C_CYAN}time | clip${C_NC})? \
+${C_BOLD}${C_CYAN}[y/yes/s/sim]${C_NC}: " opts_confirm
+if [[ "${opts_confirm,,}" =~ ^(y|yes|s|sim)$ ]]; then
+    read -p "• Enter start time ${C_BOLD}${C_CYAN}(e.g. 01:30)${C_NC} or press Enter to skip: " start_time
+    read -p "• Enter end time   ${C_BOLD}${C_CYAN}(e.g. 15:45)${C_NC} or press Enter to skip: " end_time
+fi
 
 validate_time() {
     local time_input="$1"
@@ -110,6 +115,7 @@ mkdir -p "$download_dir"
 # SEE: [trim-filenames](#https://github.com/yt-dlp/yt-dlp/issues/3494#issuecomment-2532759099).
 # `--restrict-filenames` - Restrict filenames to only ASCII characters, avoid "&" and spaces in filenames.
 # `--embed-subs` - Download and embed video subtitles(CC).
+# `-f "bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/best[height<=480][ext=mp4]"` - Select 480p max quality.
 
 # Use the detected container runtime variable ($CONTAINER_APP)
 $CONTAINER_APP run --rm -v "$download_dir":/Downloads \

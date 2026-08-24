@@ -1,4 +1,17 @@
 #!/usr/bin/env bash
+# container-internet.sh — Interactively block/allow/review internet access
+#   for a running Docker container by inserting or removing an iptables rule
+#   in the DOCKER-USER chain. Requires fzf and sudo.
+#
+# Usage:
+#   ./container-internet.sh                       # interactive: pick container + action
+#   ./container-internet.sh <name>                # interactive: pick action
+#   ./container-internet.sh <name> <action>       # direct: on | off | status
+#
+# Actions:
+#   on     — remove the DROP rule (allow internet)
+#   off    — add the DROP rule (block internet)
+#   status — print current state without changing anything
 set -e
 
 # ── Helpers ───────────────────────────────────────────────────────────
