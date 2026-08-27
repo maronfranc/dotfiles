@@ -14,5 +14,8 @@ SRC_THEME="$PWD/themes"
 rm -rf "$TARGET_THEME" 
 rm -rf "$TARGET_CONFIG" 
 
+mkdir -p "$HOME/.config/posting"
+mkdir -p "$HOME/.local/share/posting"
+
 ln -sf "$SRC_CONFIG" "$TARGET_CONFIG" 
 ln -sf "$SRC_THEME" "$TARGET_THEME" 

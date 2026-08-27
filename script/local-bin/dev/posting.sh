@@ -13,9 +13,15 @@ C_RED=$'\033[31m'
 C_YELLOW=$'\033[33m'
 C_NC="\033[0m" # Color reset
 
-POSTING_HOME="${HOME}/999_posting_collections"
+POSTING_HOME="${HOME}/code/zzz_posting_collections"
 ENV_PATH="${POSTING_HOME}/.env"
 commands=("help" "create" "open" "delete" "edit_env")
+
+# Ensure .env file and its parent directory exist
+mkdir -p "$(dirname "$ENV_PATH")"
+if [ ! -f "$ENV_PATH" ]; then
+    touch "$ENV_PATH"
+fi
 
 if ! command -v fzf >/dev/null 2>&1; then
     echo -e "Please install ${C_CYAN}fzf${C_NC} and try again."
