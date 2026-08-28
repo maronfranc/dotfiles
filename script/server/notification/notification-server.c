@@ -45,10 +45,10 @@ static void handle_sigchld(int sig)
 /* URL decoding helpers                                                */
 /* ------------------------------------------------------------------ */
 
-static int url_decode(const char *src, char *dst)
+static int url_decode(const char *src, char *dst, size_t dst_size)
 {
     int dlen = 0;
-    while (*src)
+    while (*src && dlen < (int)(dst_size - 1))
     {
         if (*src == '+')
         {
@@ -76,7 +76,7 @@ static int parse_urlencoded(const char *body, char **keys, char **values, int ma
         return 0;
 
     char decoded[BUFFER_SIZE];
-    url_decode(body, decoded);
+    url_decode(body, decoded, sizeof(decoded));
 
     int count = 0;
     char *saveptr = NULL;
@@ -89,11 +89,11 @@ static int parse_urlencoded(const char *body, char **keys, char **values, int ma
         {
             *eq = '\0';
             char decoded_key[BUFFER_SIZE];
-            url_decode(param, decoded_key);
+            url_decode(param, decoded_key, sizeof(decoded_key));
             keys[count] = strdup(decoded_key);
 
             char decoded_val[BUFFER_SIZE];
-            url_decode(eq + 1, decoded_val);
+            url_decode(eq + 1, decoded_val, sizeof(decoded_val));
             values[count] = strdup(decoded_val);
             count++;
         }
@@ -128,17 +128,19 @@ static const char *get_param(char **keys, char **values, int count, const char *
 static void send_response(int client_fd, int status_code, const char *status_text,
                           const char *content_type, const char *body)
 {
-    char response[BUFFER_SIZE];
-    int len;
-    len = snprintf(response, sizeof(response),
-                   "HTTP/1.1 %d %s\r\n"
-                   "Content-Type: %s\r\n"
-                   "Content-Length: %d\r\n"
-                   "Connection: close\r\n"
-                   "\r\n%s",
-                   status_code, status_text, content_type,
-                   (int)strlen(body), body);
-    send(client_fd, response, len, MSG_NOSIGNAL);
+    int body_len = (int)strlen(body);
+    char header[BUFFER_SIZE];
+    int hlen;
+    hlen = snprintf(header, sizeof(header),
+                    "HTTP/1.1 %d %s\r\n"
+                    "Content-Type: %s\r\n"
+                    "Content-Length: %d\r\n"
+                    "Connection: close\r\n"
+                    "\r\n",
+                    status_code, status_text, content_type, body_len);
+    send(client_fd, header, hlen, MSG_NOSIGNAL);
+    if (body_len > 0)
+        send(client_fd, body, body_len, MSG_NOSIGNAL);
 }
 
 static ssize_t read_all(int client_fd, char *buf, size_t buf_len)
