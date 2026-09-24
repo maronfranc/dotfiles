@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-echo 'Installing TMUX...'
-sudo apt install tmux
+echo 'Installing TMUX and session manager dependencies...'
+sudo apt install tmux jq fzf
 echo 'Installing TPM: Tmux Plugin Manager...'
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
