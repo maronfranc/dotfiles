@@ -15,8 +15,17 @@
 #include <ctype.h>
 
 #define BUFFER_SIZE 4096
-#define LISTEN_PORT 22222
-#define LISTEN_HOST "0.0.0.0"
+
+/* The listen address lives in the makefile (PORT / LISTEN_HOST), which passes it
+   in as -DLISTEN_PORT=... -DLISTEN_HOST='"..."'. Build through make, or supply
+   both by hand: gcc -DLISTEN_PORT=8080 -DLISTEN_HOST='"0.0.0.0"' */
+#ifndef LISTEN_PORT
+#error "LISTEN_PORT is not defined; build with make, or pass -DLISTEN_PORT=<port>"
+#endif
+
+#ifndef LISTEN_HOST
+#error "LISTEN_HOST is not defined; build with make, or pass -DLISTEN_HOST='\"<addr>\"'"
+#endif
 
 #define XDG_DIR ".local/share/notification-server"
 #define PID_FILE XDG_DIR "/notification-server.pid"
@@ -45,42 +54,59 @@ static void handle_sigchld(int sig)
 /* URL decoding helpers                                                */
 /* ------------------------------------------------------------------ */
 
-static int url_decode(const char *src, char *dst, size_t dst_size)
+/* Decode in place: the decoded form is never longer than the encoded form */
+static void url_decode(char *s)
 {
-    int dlen = 0;
-    while (*src && dlen < (int)(dst_size - 1))
+    char *dst = s;
+    char *src = s;
+
+    while (*src)
     {
         if (*src == '+')
         {
-            dst[dlen++] = ' ';
+            *dst++ = ' ';
             src++;
         }
         else if (src[0] == '%' && isxdigit((unsigned char)src[1]) && isxdigit((unsigned char)src[2]))
         {
             char hex[3] = { src[1], src[2], '\0' };
-            dst[dlen++] = (char)strtol(hex, NULL, 16);
+            *dst++ = (char)strtol(hex, NULL, 16);
             src += 3;
         }
         else
         {
-            dst[dlen++] = *src++;
+            *dst++ = *src++;
         }
     }
-    dst[dlen] = '\0';
-    return dlen;
+    *dst = '\0';
 }
 
+/* strdup a string and URL-decode the copy; NULL on allocation failure */
+static char *decode_dup(const char *s)
+{
+    char *out = strdup(s);
+    if (out)
+        url_decode(out);
+    return out;
+}
+
+/* Split the body on '&' first, then decode each key and value, so that
+   percent-encoded separators inside a value are not mistaken for one */
 static int parse_urlencoded(const char *body, char **keys, char **values, int max_params)
 {
     if (!body || !*body)
         return 0;
 
-    char decoded[BUFFER_SIZE];
-    url_decode(body, decoded, sizeof(decoded));
+    char raw[BUFFER_SIZE];
+    size_t len = strlen(body);
+    if (len >= sizeof(raw))
+        len = sizeof(raw) - 1;
+    memcpy(raw, body, len);
+    raw[len] = '\0';
 
     int count = 0;
     char *saveptr = NULL;
-    char *param = strtok_r(decoded, "&", &saveptr);
+    char *param = strtok_r(raw, "&", &saveptr);
 
     while (param && count < max_params)
     {
@@ -88,14 +114,19 @@ static int parse_urlencoded(const char *body, char **keys, char **values, int ma
         if (eq)
         {
             *eq = '\0';
-            char decoded_key[BUFFER_SIZE];
-            url_decode(param, decoded_key, sizeof(decoded_key));
-            keys[count] = strdup(decoded_key);
-
-            char decoded_val[BUFFER_SIZE];
-            url_decode(eq + 1, decoded_val, sizeof(decoded_val));
-            values[count] = strdup(decoded_val);
-            count++;
+            char *key = decode_dup(param);
+            char *value = decode_dup(eq + 1);
+            if (key && value)
+            {
+                keys[count] = key;
+                values[count] = value;
+                count++;
+            }
+            else
+            {
+                free(key);
+                free(value);
+            }
         }
         param = strtok_r(NULL, "&", &saveptr);
     }
@@ -119,6 +150,61 @@ static const char *get_param(char **keys, char **values, int count, const char *
             return values[i];
     }
     return NULL;
+}
+
+/* Case-insensitive comparison restricted to ASCII */
+static int strcaseeq(const char *a, const char *b)
+{
+    while (*a && *b)
+    {
+        if (tolower((unsigned char)*a) != tolower((unsigned char)*b))
+            return 0;
+        a++;
+        b++;
+    }
+    return *a == '\0' && *b == '\0';
+}
+
+/* Validate an urgency string; returns a canonical value or NULL if invalid */
+static const char *parse_urgency(const char *value)
+{
+    if (!value || !*value)
+        return "normal";
+    if (strcaseeq(value, "low"))
+        return "low";
+    if (strcaseeq(value, "normal"))
+        return "normal";
+    if (strcaseeq(value, "critical"))
+        return "critical";
+    return NULL;
+}
+
+/* Copy src into dst, wrapping single quotes so it is safe for /bin/sh */
+static void shell_quote(const char *src, char *dst, size_t dst_size)
+{
+    size_t j = 0;
+    if (dst_size < 3)
+    {
+        if (dst_size > 0)
+            dst[0] = '\0';
+        return;
+    }
+
+    dst[j++] = '\'';
+    for (size_t i = 0; src[i] && j + 4 < dst_size; i++)
+    {
+        if (src[i] == '\'')
+        {
+            memcpy(dst + j, "'\\''", 4);
+            j += 4;
+        }
+        else
+        {
+            dst[j++] = src[i];
+        }
+    }
+    dst[j++] = '\'';
+    dst[j] = '\0';
 }
 
 /* ------------------------------------------------------------------ */
@@ -237,22 +323,56 @@ static void handle_client(int client_fd)
     const char *description = get_param(keys, values, param_count, "body");
     if (!description)
         description = get_param(keys, values, param_count, "description");
+    const char *icon = get_param(keys, values, param_count, "icon");
+    if (!icon)
+        icon = get_param(keys, values, param_count, "app-icon");
 
     if (!title)
         title = "";
     if (!description)
         description = "";
+    if (!icon)
+        icon = "";
+
+    const char *urgency = parse_urgency(get_param(keys, values, param_count, "urgency"));
+    if (!urgency)
+    {
+        send_response(client_fd, 400, "Bad Request", "text/plain",
+                      "Invalid urgency, expected one of: low, normal, critical");
+        free_params(keys, values, param_count);
+        return;
+    }
 
     char time_str[64];
     time_t now = time(NULL);
     struct tm tm_buf;
     struct tm *tm_info = localtime_r(&now, &tm_buf);
     strftime(time_str, sizeof(time_str), "%Y-%m-%dT%H:%M:%S", tm_info);
-    fprintf(stderr, "[%s] title=\"%s\", body=\"%s\"\n", time_str, title, description);
+    if (*icon)
+        fprintf(stderr, "[%s] urgency=%s, icon=\"%s\", title=\"%s\", body=\"%s\"\n",
+                time_str, urgency, icon, title, description);
+    else
+        fprintf(stderr, "[%s] urgency=%s, title=\"%s\", body=\"%s\"\n",
+                time_str, urgency, title, description);
     fflush(stderr);
 
-    char cmd[BUFFER_SIZE * 2];
-    snprintf(cmd, sizeof(cmd), "notify-send '%s' '%s'", title, description);
+    char quoted_title[BUFFER_SIZE];
+    char quoted_body[BUFFER_SIZE];
+    char quoted_icon[BUFFER_SIZE];
+    shell_quote(title, quoted_title, sizeof(quoted_title));
+    shell_quote(description, quoted_body, sizeof(quoted_body));
+    shell_quote(icon, quoted_icon, sizeof(quoted_icon));
+
+    /* -i takes an icon name from the current theme or an absolute image path */
+    char icon_opt[BUFFER_SIZE + 8];
+    if (*icon)
+        snprintf(icon_opt, sizeof(icon_opt), " -i %s", quoted_icon);
+    else
+        snprintf(icon_opt, sizeof(icon_opt), "%s", "");
+
+    char cmd[BUFFER_SIZE * 4];
+    snprintf(cmd, sizeof(cmd), "notify-send -u '%s'%s %s %s >/dev/null 2>&1",
+             urgency, icon_opt, quoted_title, quoted_body);
     FILE *pipe = popen(cmd, "r");
     if (pipe)
         pclose(pipe);
