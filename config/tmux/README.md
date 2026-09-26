@@ -22,6 +22,7 @@ ${XDG_STATE_HOME:-$HOME/.local/state}/tmux/snapshots.json
 | `F9` | Save the current session under its current name |
 | `F10` | Select and restore a saved session |
 | `F11` | Select and delete a saved session |
+| `F12` | Save the current session, then detach from tmux |
 
 The manager preserves session, window, and pane names, working directories, pane layout, focus, and sizes. If a live session with the snapshot's name already exists, restore attaches to it instead of replacing it; running processes are not recreated. The `new` command prompts for a session name and generates a random name when the input is empty. The `stop` command picks a running session with `fzf` and kills it after confirmation; pass a session name to skip the picker and `--yes` to skip the confirmation. Run `new` from an ordinary terminal outside tmux. `restore` can run outside tmux or from a current session; an in-session restore saves the current session first and then switches the client to the selected session. The F-key actions do not use tmux popups.
 

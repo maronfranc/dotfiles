@@ -322,9 +322,10 @@ pick_snapshot_ids() {
     local prompt=$1
     local multi=${2:-0}
     local store_file=${3:-}
-    local selected row index value_length value_index color
+    local selected row index value_length value_index color rank
     local -a rows=()
     local -a values=()
+    local -a sortable=()
     local -a widths=(0 0 0 0 0 0)
     local -a fzf_options=(
         --ansi
@@ -378,10 +379,19 @@ pick_snapshot_ids() {
         IFS=$'\t' read -r -a values <<< "${rows[$index]}"
         if session_running "${values[2]}"; then
             rows[$index]+=$'\t'"running"
+            rank=1
         else
             rows[$index]+=$'\t'"stopped"
+            rank=0
         fi
+        sortable[index]="${rank}"$'\t'"${values[5]}"$'\t'"${rows[$index]}"
     done
+
+    mapfile -t rows < <(
+        printf '%s\n' "${sortable[@]}" |
+            sort -s -t$'\t' -k1,1n -k2,2r |
+            cut -f3-
+    )
 
     for row in "${rows[@]}"; do
         IFS=$'\t' read -r -a values <<< "$row"
@@ -966,7 +976,8 @@ export_snapshots() {
     validate_snapshot_document "$store_file" || die "refusing to export invalid snapshot data"
 
     write_store_file "$output_path" < "$store_file"
-    notify "Exported ${snapshot_count} snapshot(s) to '${output_path}'"
+    notify "File generated successfully: '${output_path}'"
+    printf '%s\n' "File generated successfully: '${output_path}'"
 }
 
 import_snapshots() {
