@@ -27,6 +27,20 @@ notification-server stop
 | `notification-server stop` | Gracefully stop the daemon (SIGTERM → SIGKILL after 5s) |
 | `notification-server status` | Show running state (PID) |
 
+### Process tracking
+
+Both foreground and daemon mode register themselves in
+`~/.local/share/notification-server/notification-server.pid`, and remove it on
+exit, so `status` works either way. The PID is published only after the socket
+is bound, so a failed `start` never leaves a PID file behind.
+
+If the PID file is missing or stale but something is accepting connections on
+the port, `status` reports `running on port 22222 (no pid file)` instead of
+`stopped` — that combination means the server is up but was started by another
+user, another `$HOME` (e.g. a container), or an older build. `stop` cannot
+signal a process it has no PID for and says so, with the `fuser -k 22222/tcp`
+command to use instead.
+
 ## Usage
 
 | Command | Description |

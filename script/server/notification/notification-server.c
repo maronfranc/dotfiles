@@ -377,7 +377,6 @@ static void handle_client(int client_fd)
     if (pipe)
         pclose(pipe);
     send_response(client_fd, 200, "OK", "text/plain", "ok");
-    close(client_fd);
 
     free_params(keys, values, param_count);
 }
@@ -453,6 +452,38 @@ static void remove_pid(void)
     char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/%s", home, PID_FILE);
     unlink(path);
+}
+
+/* Probe a PID with signal 0. EPERM means the process exists but belongs to
+   another user, which still counts as alive. */
+static int pid_is_alive(int pid)
+{
+    if (pid <= 0)
+        return 0;
+    if (kill(pid, 0) == 0)
+        return 1;
+    return errno == EPERM;
+}
+
+/* True if something accepts connections on the local LISTEN_PORT. Used by
+   `status` as a fallback so a live server is never reported as stopped just
+   because its PID file is missing. */
+static int port_is_open(void)
+{
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd < 0)
+        return 0;
+
+    /* LISTEN_HOST may be a wildcard, so probe over the loopback address */
+    struct sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(LISTEN_PORT);
+    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+    int open = connect(fd, (struct sockaddr *)&addr, sizeof(addr)) == 0;
+    close(fd);
+    return open;
 }
 
 /* ------------------------------------------------------------------ */
@@ -576,7 +607,7 @@ static void cmd_start(void)
     if (read_pid(buf, sizeof(buf)) == 0)
     {
         int pid = (int)strtol(buf, NULL, 10);
-        if (kill(pid, 0) == 0)
+        if (pid_is_alive(pid))
         {
             fprintf(stderr, "already running (PID %d) on port %d\n", pid, LISTEN_PORT);
             exit(1);
@@ -585,18 +616,27 @@ static void cmd_start(void)
         remove_pid();
     }
 
+    /* Bind before forking: the listening socket is inherited by the child, and
+       a failure (EADDRINUSE) is then reported to the caller's terminal with a
+       non-zero exit, instead of the daemon dying silently after its stdio has
+       been detached. */
+    int server_fd;
+    setup_server_socket(&server_fd);
+
     daemonize();
 
-    /* Child (grandchild): set up server and run */
-    write_pid();
-    notify_server_start();
+    /* Child: the PID is published only now that the socket is bound. Writing
+       it earlier would leave a PID file naming a process that dies on
+       EADDRINUSE while a previously started server keeps serving. */
     signal(SIGPIPE, SIG_IGN);
     signal(SIGTERM, handle_signal);
     signal(SIGCHLD, handle_sigchld);
 
-    int server_fd;
-    setup_server_socket(&server_fd);
+    write_pid();
+    notify_server_start();
+
     server_loop(server_fd);
+    remove_pid();
     notify_server_stop();
     exit(0);
 }
@@ -605,19 +645,30 @@ static void cmd_start(void)
 static void cmd_stop(void)
 {
     char buf[64];
-    if (read_pid(buf, sizeof(buf)) != 0)
-    {
-        fprintf(stderr, "not running\n");
-        return;
-    }
+    int pid = 0;
+    if (read_pid(buf, sizeof(buf)) == 0)
+        pid = (int)strtol(buf, NULL, 10);
 
-    int pid = (int)strtol(buf, NULL, 10);
-
-    /* Verify the PID is actually alive */
-    if (kill(pid, 0) != 0)
+    /* No usable PID, but the port answers: a server is up that this PID file
+       cannot account for. Say so instead of claiming "not running" — the
+       polybar toggle would then never be able to stop it. */
+    if (pid <= 0 || kill(pid, 0) != 0)
     {
-        remove_pid();
-        fprintf(stderr, "stale PID file removed\n");
+        if (port_is_open())
+        {
+            fprintf(stderr, "port %d is still serving but there is no usable PID file; "
+                            "stop it manually (e.g. fuser -k %d/tcp)\n", LISTEN_PORT, LISTEN_PORT);
+            return;
+        }
+        if (pid > 0)
+        {
+            remove_pid();
+            fprintf(stderr, "stale PID file removed\n");
+        }
+        else
+        {
+            fprintf(stderr, "not running\n");
+        }
         return;
     }
 
@@ -644,25 +695,36 @@ static void cmd_stop(void)
     fprintf(stderr, "killed\n");
 }
 
-/* `status` — print running/stopped state */
+/* `status` — print running/stopped state. The PID file is the primary
+   source of truth, but a missing or stale one must not be reported as
+   "stopped" while the port is actually being served, so fall back to a
+   connection probe against LISTEN_PORT. */
 static void cmd_status(void)
 {
     char buf[64];
-    if (read_pid(buf, sizeof(buf)) != 0)
+    int pid = 0;
+    if (read_pid(buf, sizeof(buf)) == 0)
+        pid = (int)strtol(buf, NULL, 10);
+
+    if (pid_is_alive(pid))
     {
-        printf("stopped\n");
+        printf("running (PID %d) on port %d\n", pid, LISTEN_PORT);
         return;
     }
 
-    int pid = (int)strtol(buf, NULL, 10);
-    if (kill(pid, 0) == 0)
+    if (port_is_open())
     {
-        printf("running (PID %d) on port %d\n", pid, LISTEN_PORT);
+        if (pid > 0)
+            printf("running on port %d (stale PID %d in pid file)\n", LISTEN_PORT, pid);
+        else
+            printf("running on port %d (no pid file)\n", LISTEN_PORT);
+        return;
     }
-    else
-    {
+
+    if (pid > 0)
         printf("stopped (stale PID %d)\n", pid);
-    }
+    else
+        printf("stopped\n");
 }
 
 /* ------------------------------------------------------------------ */
@@ -671,18 +733,26 @@ static void cmd_status(void)
 
 static void run_foreground(void)
 {
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGTERM, handle_signal);
-    signal(SIGCHLD, handle_sigchld);
+    ensure_xdg_dir();
 
     int server_fd;
     setup_server_socket(&server_fd);
+
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGTERM, handle_signal);
+    signal(SIGINT, handle_signal);
+    signal(SIGCHLD, handle_sigchld);
+
+    /* Register the PID here too, otherwise a foreground instance is invisible
+       to `status` and the polybar indicator */
+    write_pid();
 
     printf("Server running at http://%s:%d/\n", LISTEN_HOST, LISTEN_PORT);
     fflush(stdout);
     notify_server_start();
 
     server_loop(server_fd);
+    remove_pid();
     notify_server_stop();
 }
 
