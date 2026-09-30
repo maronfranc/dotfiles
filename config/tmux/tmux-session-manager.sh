@@ -15,7 +15,7 @@ TABLE_NAME_COLOR=$'\033[1;36m'
 TABLE_SESSION_COLOR=$'\033[32m'
 TABLE_COUNT_COLOR=$'\033[33m'
 TABLE_DATE_COLOR=$'\033[2;37m'
-TABLE_STATUS_RUNNING_COLOR=$'\033[32m'
+TABLE_STATUS_RUNNING_COLOR=$'\033[1;92m'
 TABLE_STATUS_STOPPED_COLOR=$'\033[2;37m'
 TABLE_RESET=$'\033[0m'
 
@@ -46,7 +46,7 @@ cleanup() {
 trap cleanup EXIT
 
 usage() {
-    printf '%s\n' "Usage: ${PROGRAM_NAME} [<new|save|restore|delete|stop|list|export|import>] [name-or-id] [--all] [--yes]"
+    printf '%s\n' "Usage: ${PROGRAM_NAME} [<new|save|save-and-stop|restore|delete|stop|list|export|import>] [name-or-id] [--all] [--yes]"
 }
 
 notify() {
@@ -305,7 +305,7 @@ pick_command() {
 
     require_command fzf
     if inside_tmux; then
-        commands=(save restore delete stop list export import)
+        commands=(save save-and-stop restore delete stop list export import)
     else
         commands=(restore delete stop new list export import)
     fi
@@ -1081,6 +1081,35 @@ stop_session() {
     notify "Stopped tmux session '${session_name}'"
 }
 
+current_session_name() {
+    local pane=${TMUX_SESSION_MANAGER_SOURCE_PANE:-${TMUX_PANE:-}}
+
+    if [[ -n "$pane" ]]; then
+        tmux_value "$pane" '#{session_name}'
+    else
+        tmux_cmd display-message -p '#{session_name}'
+    fi
+}
+
+save_and_stop() {
+    local requested_name=${1:-}
+    local session_name snapshot_name
+
+    require_command tmux
+    if ! inside_tmux; then
+        die "this command must be run from inside tmux"
+    fi
+
+    session_name=$(current_session_name) || die "unable to determine the current tmux session"
+    [[ -n "$session_name" ]] || die "the current tmux session has no name"
+    [[ ! "$session_name" =~ [[:cntrl:]] ]] || die "the current tmux session name contains control characters"
+
+    snapshot_name=${requested_name:-$session_name}
+    save_snapshot "$snapshot_name"
+
+    tmux_cmd kill-session -t "=${session_name}" || die "unable to stop tmux session '${session_name}'"
+}
+
 print_table_border() {
     local start=$1
     local separator=$2
@@ -1218,6 +1247,11 @@ main() {
             shift || true
             parse_arguments "$@"
             save_snapshot "${PARSED_ARGUMENTS[0]:-}"
+            ;;
+        save-and-stop)
+            shift || true
+            parse_arguments "$@"
+            save_and_stop "${PARSED_ARGUMENTS[0]:-}"
             ;;
         restore)
             shift || true

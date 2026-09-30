@@ -22,9 +22,9 @@ ${XDG_STATE_HOME:-$HOME/.local/state}/tmux/snapshots.json
 | `F9` | Save the current session under its current name |
 | `F10` | Select and restore a saved session |
 | `F11` | Select and delete a saved session |
-| `F12` | Save the current session, then detach from tmux |
+| `F12` | Save the current session, then stop (kill) it |
 
-The manager preserves session, window, and pane names, working directories, pane layout, focus, and sizes. If a live session with the snapshot's name already exists, restore attaches to it instead of replacing it; running processes are not recreated. The `new` command prompts for a session name and generates a random name when the input is empty. The `stop` command picks a running session with `fzf` and kills it after confirmation; pass a session name to skip the picker and `--yes` to skip the confirmation. Run `new` from an ordinary terminal outside tmux. `restore` can run outside tmux or from a current session; an in-session restore saves the current session first and then switches the client to the selected session. The F-key actions do not use tmux popups.
+The manager preserves session, window, and pane names, working directories, pane layout, focus, and sizes. If a live session with the snapshot's name already exists, restore attaches to it instead of replacing it; running processes are not recreated. The `new` command prompts for a session name and generates a random name when the input is empty. The `stop` command picks a running session with `fzf` and kills it after confirmation; pass a session name to skip the picker and `--yes` to skip the confirmation. The `save-and-stop` command saves the current session and then kills it, so it only works from inside tmux; pass a name to store the snapshot under that name instead of the session name. Run `new` from an ordinary terminal outside tmux. `restore` can run outside tmux or from a current session; an in-session restore saves the current session first and then switches the client to the selected session. The F-key actions do not use tmux popups.
 
 `export` writes every saved snapshot to a JSON backup in the current directory as `tmux-session-snapshots-<UTC timestamp>.json` unless a path argument is given. `import` restores backups: without a path argument it picks a backup `*.json` from the current directory with `fzf` (non-backup JSON files are ignored), then picks which snapshots to bring in; `import --all` skips that selection and takes every snapshot in the backup. Imported snapshots replace existing ones with the same name or id after confirmation. Both commands accept a path argument, and `--yes` skips their confirmation prompt.
 
@@ -34,6 +34,7 @@ The same commands are available directly. Running the manager without a command 
 tmux-session-manager
 tmux-session-manager new
 tmux-session-manager save my-session
+tmux-session-manager save-and-stop
 tmux-session-manager list
 tmux-session-manager restore
 tmux-session-manager delete
