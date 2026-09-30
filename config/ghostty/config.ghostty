@@ -64,7 +64,13 @@ clipboard-paste-protection = false
 # --- Mouse ---
 mouse-hide-while-typing = true
 
-# --- TODO: Keybindings ---
+# --- Keybindings ---
+# Ghostty binds shift+home / shift+end by default (scrollback / native
+# selection), which swallows the keypress. Unbinding them lets the keys
+# reach the app as `ESC [ 1 ; 2 H` / `ESC [ 1 ; 2 F` (select to line
+# start/end in readline, nano, vim, ...).
+keybind = shift+home=unbind
+keybind = shift+end=unbind
 
 # --- General ---
 working-directory = none
