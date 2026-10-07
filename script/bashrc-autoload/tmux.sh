@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export TERM="xterm-256color"
+# Set term color but not on tmux.
+[[ -z ${TMUX:-} ]] && export TERM="xterm-256color"
 
 # SEE: https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-windowizer
 function tmuxdev() {

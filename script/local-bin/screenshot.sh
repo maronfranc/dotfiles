@@ -14,18 +14,18 @@ FILENAME="${SCREENSHOT_DIR}/${iso_date}.png"
 
 save_full() {
     scrot --file "$FILENAME" \
-        --exec 'notify-send "Full screenshot saved" "$f"'
+        --exec 'notify-send "Full screenshot saved" "$f" -t 1000'
 }
 
 save_window() {
     scrot --file "$FILENAME" --focussed \
-        --exec 'notify-send "Window screenshot saved" "$f"'
+        --exec 'notify-send "Window screenshot saved" "$f" -t 1000'
 }
 
 save_selection() {
     notify-send "Screenshot save" "Click a window to screenshot it." -t 750
     scrot --file "$FILENAME" --select \
-        --exec 'notify-send "Window screenshot saved" "$f"'
+        --exec 'notify-send "Window screenshot saved" "$f" -t 1000'
 }
 
 case "${1:-full}" in
